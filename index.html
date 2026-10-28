@@ -55,9 +55,28 @@
   }
 </style>
 
+
+  <!-- MathJax 配置 -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG: { linebreaks: { automatic: true } }
+    });
+  </script>
+  <script type="text/javascript" async
+          src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <!-- MathJax 配置结束 -->
 <meta name="generator" content="Hexo 8.1.2"></head>
 <body>
-  <header class="site-header">
+<header class="site-header">
   <div class="header-container">
     <!-- Logo / 站点标题 -->
     <div class="site-brand">
@@ -182,10 +201,10 @@
   </div>
 </header>
 
-  
-  <main class="main-content">
-    <div class="container">
-      <div class="page-layout blog-layout">
+
+<main class="main-content">
+  <div class="container">
+    <div class="page-layout blog-layout">
   <div class="content-wrapper">
     <!-- 文章列表 -->
     <div class="post-list">
@@ -227,7 +246,7 @@
         <path d="M15.1 18H3"></path>
       </svg>
       
-      25.5k Words
+      26.6k Words
     </span>
   
 
@@ -239,7 +258,7 @@
         <polyline points="12 6 12 12 16 14"></polyline>
       </svg>
       
-      About 86 mintues reading
+      About 89 mintues reading
     </span>
   
 
@@ -266,7 +285,9 @@
             <div class="post-excerpt">
               
                 Robotics Blog Series · Robot Fundamentals · Post #1
-IntroductionRobotics is fundamentally about understanding and controlling motion in three-dimensional space. A robot must represent where its joints...
+Introduction
+Robotics is fundamentally about understanding and controlling motion
+in three-dimensional space. A robot must represent where its joint...
               
             </div>
             
@@ -356,7 +377,9 @@ IntroductionRobotics is fundamentally about understanding and controlling motion
             <!-- 摘要 -->
             <div class="post-excerpt">
               
-                IntroductionA VPN (Virtual Private Network) encrypts your internet traffic, masks your real IP address, and enables secure access to remote resources. 
+                Introduction
+A VPN (Virtual Private Network) encrypts your internet traffic, masks
+your real IP address, and enables secure access to remote resources.
 Compared with commercial VPN providers, running ...
               
             </div>
@@ -443,9 +466,11 @@ Compared with commercial VPN providers, running ...
             <!-- 摘要 -->
             <div class="post-excerpt">
               
-                IntroductionAlgorithms are the foundation of computer science.
-This blog is a beginner-friendly introduction to ACM competitive programming algorithms.
-Instead of simply presenting algorithms and code...
+                Introduction
+Algorithms are the foundation of computer science.
+This blog is a beginner-friendly introduction to ACM competitive
+programming algorithms.
+Instead of simply presenting algorithms and cod...
               
             </div>
             
@@ -614,10 +639,10 @@ Instead of simply presenting algorithms and code...
 
 </div>
 
-    </div>
-  </main>
+  </div>
+</main>
 
-  <footer class="site-footer">
+<footer class="site-footer">
   <div class="footer-container">
     <div class="footer-content">
       <!-- 版权信息 -->
@@ -664,10 +689,10 @@ Instead of simply presenting algorithms and code...
   </div>
 </footer>
 
-  
-  <!-- 搜索模态框 -->
-  
-    <div id="search-modal" class="search-modal">
+
+<!-- 搜索模态框 -->
+
+  <div id="search-modal" class="search-modal">
   <div class="search-container">
     <!-- 搜索头部 -->
     <div class="search-header">
@@ -714,27 +739,27 @@ Instead of simply presenting algorithms and code...
   </div>
 </div>
 
-  
 
-  <!-- 站点配置 -->
-  <script>
-    window.STARTER_CONFIG = {
-      root: '/',
-      searchEnabled: true
-    };
-  </script>
 
-  <!-- 主脚本 -->
-  
+<!-- 站点配置 -->
+<script>
+  window.STARTER_CONFIG = {
+    root: '/',
+    searchEnabled: true
+  };
+</script>
+
+<!-- 主脚本 -->
+
 <script src="/js/main.js"></script>
 
-  
-  
-    
-<script src="/js/search.js"></script>
+
 
   
-  
-  
+<script src="/js/search.js"></script>
+
+
+
+
 </body>
 </html>

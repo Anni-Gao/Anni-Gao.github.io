@@ -55,9 +55,28 @@
   }
 </style>
 
+
+  <!-- MathJax 配置 -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG: { linebreaks: { automatic: true } }
+    });
+  </script>
+  <script type="text/javascript" async
+          src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <!-- MathJax 配置结束 -->
 <meta name="generator" content="Hexo 8.1.2"></head>
 <body>
-  <header class="site-header">
+<header class="site-header">
   <div class="header-container">
     <!-- Logo / 站点标题 -->
     <div class="site-brand">
@@ -182,10 +201,10 @@
   </div>
 </header>
 
-  
-  <main class="main-content">
-    <div class="container">
-      <div class="page-layout page-single">
+
+<main class="main-content">
+  <div class="container">
+    <div class="page-layout page-single">
   <article class="page-article">
     <!-- 页面头部 -->
     <header class="page-header">
@@ -194,34 +213,49 @@
 
     <!-- 页面内容 -->
     <div class="page-content markdown-body">
-      <h2 id="👋-Hello-My-name-is-Anni-Welcome-to-my-blog"><a href="#👋-Hello-My-name-is-Anni-Welcome-to-my-blog" class="headerlink" title="👋 Hello, My name is Anni, Welcome to my blog ~"></a>👋 Hello, My name is Anni, Welcome to my blog ~</h2><ul>
-<li>🚀 I am a <strong>Robot &amp; Software Engineer</strong>, dreaming to be a Full Stack Developer</li>
-<li>🎓 Graduated from University of Bristol (M.Sc) &amp; Northeast Foresty University (B.Eng)</li>
-<li>🌱 Currently exploring <strong>Artificial Intelligence</strong> and <strong>Machine Learning</strong> technologies</li>
+      <h2 id="hello-my-name-is-anni-welcome-to-my-blog">👋 Hello, My name is
+Anni, Welcome to my blog ~</h2>
+<ul>
+<li>🚀 I am a <strong>Robot &amp; Software Engineer</strong>, dreaming
+to be a Full Stack Developer</li>
+<li>🎓 Graduated from University of Bristol (M.Sc) &amp; Northeast
+Foresty University (B.Eng)</li>
+<li>🌱 Currently exploring <strong>Artificial Intelligence</strong> and
+<strong>Machine Learning</strong> technologies</li>
 <li>📚 Passionate about reading, writing, and sharing knowledge</li>
 <li>✍️ This blog is a space for <strong>tech notes</strong></li>
 </ul>
-<h3 id="💡-About-This-Blog"><a href="#💡-About-This-Blog" class="headerlink" title="💡 About This Blog"></a>💡 About This Blog</h3><p>This blog was established in 2026, built with the Hexo framework and deployed on GitHub Pages. It serves as a personal knowledge base and a place to share ideas. I hope you find something useful here, and I welcome discussions and feedback.</p>
-<h3 id="✨-Skills-Interests"><a href="#✨-Skills-Interests" class="headerlink" title="✨ Skills &amp; Interests"></a>✨ Skills &amp; Interests</h3><ul>
+<h3 id="about-this-blog">💡 About This Blog</h3>
+<p>This blog was established in 2026, built with the Hexo framework and
+deployed on GitHub Pages. It serves as a personal knowledge base and a
+place to share ideas. I hope you find something useful here, and I
+welcome discussions and feedback.</p>
+<h3 id="skills-interests">✨ Skills &amp; Interests</h3>
+<ul>
 <li><strong>Programming Languages</strong>: Java, Python</li>
 <li><strong>Frontend</strong>: React, Vue.js, Hexo</li>
 <li><strong>Backend</strong>: Node.js, Flask, Docker</li>
-<li><strong>Other Interests</strong>: Photography, Traveling, Rock Climbing</li>
+<li><strong>Other Interests</strong>: Photography, Traveling, Rock
+Climbing</li>
 </ul>
-<h3 id="📫-Contact-Me"><a href="#📫-Contact-Me" class="headerlink" title="📫 Contact Me"></a>📫 Contact Me</h3><ul>
-<li><strong>GitHub</strong>: <a target="_blank" rel="noopener" href="https://github.com/Anni-Gao">https://github.com/Anni-Gao</a></li>
-<li><strong>邮箱</strong>: <code>eng.annigao@gmail.com</code> or <code>anni_gao@163.com</code></li>
+<h3 id="contact-me">📫 Contact Me</h3>
+<ul>
+<li><strong>GitHub</strong>: <a
+target="_blank" rel="noopener" href="https://github.com/Anni-Gao">https://github.com/Anni-Gao</a></li>
+<li><strong>邮箱</strong>: <code>eng.annigao@gmail.com</code> or
+<code>anni_gao@163.com</code></li>
 </ul>
-<p>Feel free to reach out via any of these channels or leave a comment on the blog.<br>Nice to meet you!</p>
+<p>Feel free to reach out via any of these channels or leave a comment
+on the blog. Nice to meet you!</p>
 
     </div>
   </article>
 </div>
 
-    </div>
-  </main>
+  </div>
+</main>
 
-  <footer class="site-footer">
+<footer class="site-footer">
   <div class="footer-container">
     <div class="footer-content">
       <!-- 版权信息 -->
@@ -268,10 +302,10 @@
   </div>
 </footer>
 
-  
-  <!-- 搜索模态框 -->
-  
-    <div id="search-modal" class="search-modal">
+
+<!-- 搜索模态框 -->
+
+  <div id="search-modal" class="search-modal">
   <div class="search-container">
     <!-- 搜索头部 -->
     <div class="search-header">
@@ -318,27 +352,27 @@
   </div>
 </div>
 
-  
 
-  <!-- 站点配置 -->
-  <script>
-    window.STARTER_CONFIG = {
-      root: '/',
-      searchEnabled: true
-    };
-  </script>
 
-  <!-- 主脚本 -->
-  
+<!-- 站点配置 -->
+<script>
+  window.STARTER_CONFIG = {
+    root: '/',
+    searchEnabled: true
+  };
+</script>
+
+<!-- 主脚本 -->
+
 <script src="/js/main.js"></script>
 
-  
-  
-    
-<script src="/js/search.js"></script>
+
 
   
-  
-  
+<script src="/js/search.js"></script>
+
+
+
+
 </body>
 </html>

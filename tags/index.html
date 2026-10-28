@@ -55,9 +55,28 @@
   }
 </style>
 
+
+  <!-- MathJax 配置 -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG: { linebreaks: { automatic: true } }
+    });
+  </script>
+  <script type="text/javascript" async
+          src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <!-- MathJax 配置结束 -->
 <meta name="generator" content="Hexo 8.1.2"></head>
 <body>
-  <header class="site-header">
+<header class="site-header">
   <div class="header-container">
     <!-- Logo / 站点标题 -->
     <div class="site-brand">
@@ -182,10 +201,10 @@
   </div>
 </header>
 
-  
-  <main class="main-content">
-    <div class="container">
-      <div class="page-layout tags-layout">
+
+<main class="main-content">
+  <div class="container">
+    <div class="page-layout tags-layout">
   <div class="tags-wrapper">
     <header class="tags-header">
       <h1 class="tags-title">Tags</h1>
@@ -258,10 +277,10 @@
   </div>
 </div>
 
-    </div>
-  </main>
+  </div>
+</main>
 
-  <footer class="site-footer">
+<footer class="site-footer">
   <div class="footer-container">
     <div class="footer-content">
       <!-- 版权信息 -->
@@ -308,10 +327,10 @@
   </div>
 </footer>
 
-  
-  <!-- 搜索模态框 -->
-  
-    <div id="search-modal" class="search-modal">
+
+<!-- 搜索模态框 -->
+
+  <div id="search-modal" class="search-modal">
   <div class="search-container">
     <!-- 搜索头部 -->
     <div class="search-header">
@@ -358,27 +377,27 @@
   </div>
 </div>
 
-  
 
-  <!-- 站点配置 -->
-  <script>
-    window.STARTER_CONFIG = {
-      root: '/',
-      searchEnabled: true
-    };
-  </script>
 
-  <!-- 主脚本 -->
-  
+<!-- 站点配置 -->
+<script>
+  window.STARTER_CONFIG = {
+    root: '/',
+    searchEnabled: true
+  };
+</script>
+
+<!-- 主脚本 -->
+
 <script src="/js/main.js"></script>
 
-  
-  
-    
-<script src="/js/search.js"></script>
+
 
   
-  
-  
+<script src="/js/search.js"></script>
+
+
+
+
 </body>
 </html>

@@ -55,9 +55,28 @@
   }
 </style>
 
+
+  <!-- MathJax 配置 -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG: { linebreaks: { automatic: true } }
+    });
+  </script>
+  <script type="text/javascript" async
+          src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <!-- MathJax 配置结束 -->
 <meta name="generator" content="Hexo 8.1.2"></head>
 <body>
-  <header class="site-header">
+<header class="site-header">
   <div class="header-container">
     <!-- Logo / 站点标题 -->
     <div class="site-brand">
@@ -182,10 +201,10 @@
   </div>
 </header>
 
-  
-  <main class="main-content">
-    <div class="container">
-      <div class="page-layout post-layout">
+
+<main class="main-content">
+  <div class="container">
+    <div class="page-layout post-layout">
   <article class="post-article">
     <!-- 文章头部 -->
     <header class="post-header">
@@ -228,7 +247,7 @@
         <path d="M15.1 18H3"></path>
       </svg>
       
-      25.5k Words
+      26.6k Words
     </span>
   
 
@@ -240,7 +259,7 @@
         <polyline points="12 6 12 12 16 14"></polyline>
       </svg>
       
-      About 86 mintues reading
+      About 89 mintues reading
     </span>
   
 
@@ -256,46 +275,89 @@
     <!-- 文章内容 -->
     <div class="post-content markdown-body">
       <p><em>Robotics Blog Series · Robot Fundamentals · Post #1</em></p>
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Robotics is fundamentally about understanding and controlling motion in three-dimensional space. A robot must represent where its joints are, determine how its end-effector moves, transform measurements between coordinate frames, and calculate how forces affect its motion.</p>
-<p>Behind many of these operations lies a common mathematical language: <strong>linear algebra</strong>.</p>
-<p>Vectors represent positions, directions, velocities, and forces. Matrices represent linear transformations and provide a systematic way to manipulate these quantities. The dot product and cross product reveal geometric relationships such as angles, projections, and rotational effects.</p>
-<p>In this article, we will build these concepts from first principles and implement them using Python and NumPy. Rather than treating linear algebra as an isolated mathematical subject, we will connect each concept to practical robotics applications.</p>
+<h2 id="introduction">Introduction</h2>
+<p>Robotics is fundamentally about understanding and controlling motion
+in three-dimensional space. A robot must represent where its joints are,
+determine how its end-effector moves, transform measurements between
+coordinate frames, and calculate how forces affect its motion.</p>
+<p>Behind many of these operations lies a common mathematical language:
+<strong>linear algebra</strong>.</p>
+<p>Vectors represent positions, directions, velocities, and forces.
+Matrices represent linear transformations and provide a systematic way
+to manipulate these quantities. The dot product and cross product reveal
+geometric relationships such as angles, projections, and rotational
+effects.</p>
+<p>In this article, we will build these concepts from first principles
+and implement them using Python and NumPy. Rather than treating linear
+algebra as an isolated mathematical subject, we will connect each
+concept to practical robotics applications.</p>
 <p>By the end, you will be able to:</p>
 <ul>
 <li>Represent robot positions and directions using vectors.</li>
 <li>Understand dot products and cross products geometrically.</li>
 <li>Use matrices to rotate, scale, and transform vectors.</li>
-<li>Compose transformations and understand the order of matrix multiplication.</li>
+<li>Compose transformations and understand the order of matrix
+multiplication.</li>
 <li>Implement and test basic geometric operations using NumPy.</li>
 </ul>
-<p>We will use a two-dimensional robot arm as a running example, then extend the ideas to three-dimensional robotics.</p>
-<hr>
-<h2 id="1-Why-Do-Robotics-Engineers-Need-Linear-Algebra"><a href="#1-Why-Do-Robotics-Engineers-Need-Linear-Algebra" class="headerlink" title="1. Why Do Robotics Engineers Need Linear Algebra?"></a>1. Why Do Robotics Engineers Need Linear Algebra?</h2><p>Consider a simple robotic arm with two revolute joints. To determine the position of its end-effector, we need to know the lengths of its links and the angles of its joints.</p>
-<p>But position calculation is only one part of the problem. A complete robotic system may also need to:</p>
+<p>We will use a two-dimensional robot arm as a running example, then
+extend the ideas to three-dimensional robotics.</p>
+<hr />
+<h2 id="why-do-robotics-engineers-need-linear-algebra">1. Why Do
+Robotics Engineers Need Linear Algebra?</h2>
+<p>Consider a simple robotic arm with two revolute joints. To determine
+the position of its end-effector, we need to know the lengths of its
+links and the angles of its joints.</p>
+<p>But position calculation is only one part of the problem. A complete
+robotic system may also need to:</p>
 <ul>
-<li>Transform a point from the robot’s local coordinate frame into the world frame.</li>
-<li>Calculate the velocity of the end-effector from joint velocities.</li>
+<li>Transform a point from the robot’s local coordinate frame into the
+world frame.</li>
+<li>Calculate the velocity of the end-effector from joint
+velocities.</li>
 <li>Determine the direction and magnitude of an applied force.</li>
 <li>Combine the motion of multiple joints.</li>
 <li>Estimate the robot’s state from sensor measurements.</li>
 <li>Solve optimization problems for motion planning and control.</li>
 </ul>
-<p>These tasks share a common foundation: representing geometric quantities numerically and manipulating them consistently.</p>
-<p>For example, the position of a point in a two-dimensional plane can be represented as</p>
-<p>$$<br>\mathbf{p} &#x3D;<br>\begin{bmatrix}<br>x \<br>y<br>\end{bmatrix}<br>$$</p>
-<p>The coordinates $x$ and $y$ specify the point’s location relative to a chosen coordinate frame.</p>
+<p>These tasks share a common foundation: representing geometric
+quantities numerically and manipulating them consistently.</p>
+<p>For example, the position of a point in a two-dimensional plane can
+be represented as</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒑</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>x</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>y</mi></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{p} =
+\begin{bmatrix}
+x \\
+y
+\end{bmatrix}</annotation></semantics></math></p>
+<p>The coordinates
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
+specify the point’s location relative to a chosen coordinate frame.</p>
 <p>A robot’s end-effector position might be</p>
-<p>$$<br>\mathbf{p} &#x3D; \begin{bmatrix} 0.6 \ 0.4 \end{bmatrix} \text{ m}<br>$$</p>
-<p>This means that the point is 0.6 meters along the frame’s x-axis and 0.4 meters along its y-axis.</p>
-<p>The same representation can describe other quantities, including velocity and force. However, their physical meanings and units differ: position is measured in meters, velocity in meters per second, and force in newtons.</p>
-<p><strong>Key idea:</strong> Linear algebra provides a unified computational framework for representing and manipulating quantities that have different physical meanings but similar mathematical structures.</p>
-<hr>
-<h2 id="2-Vectors-Representing-Position-Direction-and-Motion"><a href="#2-Vectors-Representing-Position-Direction-and-Motion" class="headerlink" title="2. Vectors: Representing Position, Direction, and Motion"></a>2. Vectors: Representing Position, Direction, and Motion</h2><h3 id="2-1-What-Is-a-Vector"><a href="#2-1-What-Is-a-Vector" class="headerlink" title="2.1 What Is a Vector?"></a>2.1 What Is a Vector?</h3><p>A vector is an ordered collection of components that represents a quantity with magnitude and direction.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒑</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.6</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.4</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> m</mtext></mrow></mrow><annotation encoding="application/x-tex">\mathbf{p} = \begin{bmatrix} 0.6 \\ 0.4 \end{bmatrix} \text{ m}</annotation></semantics></math></p>
+<p>This means that the point is 0.6 meters along the frame’s x-axis and
+0.4 meters along its y-axis.</p>
+<p>The same representation can describe other quantities, including
+velocity and force. However, their physical meanings and units differ:
+position is measured in meters, velocity in meters per second, and force
+in newtons.</p>
+<p><strong>Key idea:</strong> Linear algebra provides a unified
+computational framework for representing and manipulating quantities
+that have different physical meanings but similar mathematical
+structures.</p>
+<hr />
+<h2 id="vectors-representing-position-direction-and-motion">2. Vectors:
+Representing Position, Direction, and Motion</h2>
+<h3 id="what-is-a-vector">2.1 What Is a Vector?</h3>
+<p>A vector is an ordered collection of components that represents a
+quantity with magnitude and direction.</p>
 <p>In two dimensions,</p>
-<p>$$<br>\mathbf{v} &#x3D; \begin{bmatrix} v_x \ v_y \end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒗</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>v</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>v</mi><mi>y</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{v} = \begin{bmatrix} v_x \\ v_y \end{bmatrix}</annotation></semantics></math></p>
 <p>In three dimensions,</p>
-<p>$$<br>\mathbf{v} &#x3D; \begin{bmatrix} v_x \ v_y \ v_z \end{bmatrix}<br>$$</p>
-<p>Vectors are essential in robotics because motion and geometry are inherently spatial.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒗</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>v</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>v</mi><mi>y</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>v</mi><mi>z</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{v} = \begin{bmatrix} v_x \\ v_y \\ v_z \end{bmatrix}</annotation></semantics></math></p>
+<p>Vectors are essential in robotics because motion and geometry are
+inherently spatial.</p>
 <p>Common vector quantities include:</p>
 <table>
 <thead>
@@ -305,289 +367,709 @@
 <th>Unit</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>Position</td>
-<td>$\mathbf{p}$</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒑</mi><annotation encoding="application/x-tex">\mathbf{p}</annotation></semantics></math></td>
 <td>m</td>
 </tr>
 <tr>
 <td>Linear velocity</td>
-<td>$\mathbf{v}$</td>
-<td>m&#x2F;s</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒗</mi><annotation encoding="application/x-tex">\mathbf{v}</annotation></semantics></math></td>
+<td>m/s</td>
 </tr>
 <tr>
 <td>Linear acceleration</td>
-<td>$\mathbf{a}$</td>
-<td>m&#x2F;s²</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒂</mi><annotation encoding="application/x-tex">\mathbf{a}</annotation></semantics></math></td>
+<td>m/s²</td>
 </tr>
 <tr>
 <td>Force</td>
-<td>$\mathbf{F}$</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝑭</mi><annotation encoding="application/x-tex">\mathbf{F}</annotation></semantics></math></td>
 <td>N</td>
 </tr>
 <tr>
 <td>Direction</td>
-<td>$\mathbf{d}$</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒅</mi><annotation encoding="application/x-tex">\mathbf{d}</annotation></semantics></math></td>
 <td>Dimensionless after normalization</td>
 </tr>
-</tbody></table>
-<p>A subtle but important distinction is that a <strong>position vector</strong> describes a location relative to an origin, while a <strong>direction vector</strong> describes an orientation or direction without specifying a location.</p>
-<p>This distinction becomes especially important when transforming coordinates between different reference frames.</p>
-<h3 id="2-2-Vector-Addition-and-Subtraction"><a href="#2-2-Vector-Addition-and-Subtraction" class="headerlink" title="2.2 Vector Addition and Subtraction"></a>2.2 Vector Addition and Subtraction</h3><p>Given two vectors,</p>
-<p>$$<br>\mathbf{a}&#x3D;<br>\begin{bmatrix}<br>a_x\a_y<br>\end{bmatrix},<br>\qquad<br>\mathbf{b}&#x3D;<br>\begin{bmatrix}<br>b_x\b_y<br>\end{bmatrix}<br>$$</p>
+</tbody>
+</table>
+<p>A subtle but important distinction is that a <strong>position
+vector</strong> describes a location relative to an origin, while a
+<strong>direction vector</strong> describes an orientation or direction
+without specifying a location.</p>
+<p>This distinction becomes especially important when transforming
+coordinates between different reference frames.</p>
+<h3 id="vector-addition-and-subtraction">2.2 Vector Addition and
+Subtraction</h3>
+<p>Given two vectors,</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>y</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi mathvariant="bold-italic">𝒃</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>b</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>b</mi><mi>y</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{a}=
+\begin{bmatrix}
+a_x\\a_y
+\end{bmatrix},
+\qquad
+\mathbf{b}=
+\begin{bmatrix}
+b_x\\b_y
+\end{bmatrix}</annotation></semantics></math></p>
 <p>their sum is</p>
-<p>$$<br>\mathbf{a}+\mathbf{b}&#x3D;<br>\begin{bmatrix}<br>a_x+b_x\<br>a_y+b_y<br>\end{bmatrix}<br>$$</p>
-<p>Vector addition combines displacements. In robotics, this can represent the position of a point reached by applying one displacement after another, provided both vectors are expressed in the same coordinate frame.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>+</mo><mi mathvariant="bold-italic">𝒃</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>x</mi></msub><mo>+</mo><msub><mi>b</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>y</mi></msub><mo>+</mo><msub><mi>b</mi><mi>y</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{a}+\mathbf{b}=
+\begin{bmatrix}
+a_x+b_x\\
+a_y+b_y
+\end{bmatrix}</annotation></semantics></math></p>
+<p>Vector addition combines displacements. In robotics, this can
+represent the position of a point reached by applying one displacement
+after another, provided both vectors are expressed in the same
+coordinate frame.</p>
 <p>Similarly,</p>
-<p>$$<br>\mathbf{a}-\mathbf{b}&#x3D;<br>\begin{bmatrix}<br>a_x-b_x\<br>a_y-b_y<br>\end{bmatrix}<br>$$</p>
-<p>If $\mathbf{a}$ and $\mathbf{b}$ are two point positions expressed in the same frame, then $\mathbf{a}-\mathbf{b}$ gives the displacement from point $b$ to point $a$.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>−</mo><mi mathvariant="bold-italic">𝒃</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>x</mi></msub><mo>−</mo><msub><mi>b</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>y</mi></msub><mo>−</mo><msub><mi>b</mi><mi>y</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{a}-\mathbf{b}=
+\begin{bmatrix}
+a_x-b_x\\
+a_y-b_y
+\end{bmatrix}</annotation></semantics></math></p>
+<p>If
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒂</mi><annotation encoding="application/x-tex">\mathbf{a}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒃</mi><annotation encoding="application/x-tex">\mathbf{b}</annotation></semantics></math>
+are two point positions expressed in the same frame, then
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>−</mo><mi mathvariant="bold-italic">𝒃</mi></mrow><annotation encoding="application/x-tex">\mathbf{a}-\mathbf{b}</annotation></semantics></math>
+gives the displacement from point
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>
+to point
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>.</p>
 <p>For example, suppose a robot moves from</p>
-<p>$$<br>\mathbf{p}_1&#x3D;<br>\begin{bmatrix}<br>0.2\0.3<br>\end{bmatrix},<br>\qquad<br>\mathbf{p}_2&#x3D;<br>\begin{bmatrix}<br>0.7\0.5<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒑</mi><mn>1</mn></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.3</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi mathvariant="bold-italic">𝒑</mi><mn>2</mn></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.7</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.5</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{p}_1=
+\begin{bmatrix}
+0.2\\0.3
+\end{bmatrix},
+\qquad
+\mathbf{p}_2=
+\begin{bmatrix}
+0.7\\0.5
+\end{bmatrix}</annotation></semantics></math></p>
 <p>The displacement is</p>
-<h1 id="Delta-mathbf-p-mathbf-p-2-mathbf-p-1"><a href="#Delta-mathbf-p-mathbf-p-2-mathbf-p-1" class="headerlink" title="$$\Delta\mathbf{p}&#x3D;\mathbf{p}_2-\mathbf{p}_1"></a>$$<br>\Delta\mathbf{p}<br>&#x3D;\mathbf{p}_2-\mathbf{p}_1</h1><p>\begin{bmatrix}<br>0.5\0.2<br>\end{bmatrix}<br>\text{ m}<br>$$</p>
-<p>This displacement describes how far and in which direction the robot must move to travel from the first position to the second.</p>
-<h3 id="2-3-Scalar-Multiplication"><a href="#2-3-Scalar-Multiplication" class="headerlink" title="2.3 Scalar Multiplication"></a>2.3 Scalar Multiplication</h3><p>Multiplying a vector by a scalar changes its magnitude and may reverse its direction:</p>
-<h1 id="alpha-mathbf-v"><a href="#alpha-mathbf-v" class="headerlink" title="$$\alpha\mathbf{v}"></a>$$<br>\alpha\mathbf{v}</h1><p>\begin{bmatrix}<br>\alpha v_x\<br>\alpha v_y<br>\end{bmatrix}<br>$$</p>
-<p>For example, multiplying a velocity vector by two doubles the velocity while preserving its direction.</p>
-<p>In trajectory generation, scalar multiplication is useful for scaling a reference direction or adjusting a displacement to match a desired motion profile.</p>
-<h3 id="2-4-Vector-Magnitude-and-Normalization"><a href="#2-4-Vector-Magnitude-and-Normalization" class="headerlink" title="2.4 Vector Magnitude and Normalization"></a>2.4 Vector Magnitude and Normalization</h3><p>The Euclidean magnitude, or norm, of a vector is</p>
-<p>$$<br>|\mathbf{v}|&#x3D;\sqrt{v_x^2+v_y^2}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi mathvariant="bold-italic">𝒑</mi><mo>=</mo><msub><mi mathvariant="bold-italic">𝒑</mi><mn>2</mn></msub><mo>−</mo><msub><mi mathvariant="bold-italic">𝒑</mi><mn>1</mn></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.5</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.2</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> m</mtext></mrow></mrow><annotation encoding="application/x-tex">\Delta\mathbf{p}
+=\mathbf{p}_2-\mathbf{p}_1
+=
+\begin{bmatrix}
+0.5\\0.2
+\end{bmatrix}
+\text{ m}</annotation></semantics></math></p>
+<p>This displacement describes how far and in which direction the robot
+must move to travel from the first position to the second.</p>
+<h3 id="scalar-multiplication">2.3 Scalar Multiplication</h3>
+<p>Multiplying a vector by a scalar changes its magnitude and may
+reverse its direction:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mi mathvariant="bold-italic">𝒗</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>α</mi><msub><mi>v</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>α</mi><msub><mi>v</mi><mi>y</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha\mathbf{v}
+=
+\begin{bmatrix}
+\alpha v_x\\
+\alpha v_y
+\end{bmatrix}</annotation></semantics></math></p>
+<p>For example, multiplying a velocity vector by two doubles the
+velocity while preserving its direction.</p>
+<p>In trajectory generation, scalar multiplication is useful for scaling
+a reference direction or adjusting a displacement to match a desired
+motion profile.</p>
+<h3 id="vector-magnitude-and-normalization">2.4 Vector Magnitude and
+Normalization</h3>
+<p>The Euclidean magnitude, or norm, of a vector is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝒗</mi><mo stretchy="false" form="postfix">∥</mo><mo>=</mo><msqrt><mrow><msubsup><mi>v</mi><mi>x</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>v</mi><mi>y</mi><mn>2</mn></msubsup></mrow></msqrt></mrow><annotation encoding="application/x-tex">\|\mathbf{v}\|=\sqrt{v_x^2+v_y^2}</annotation></semantics></math></p>
 <p>In three dimensions,</p>
-<p>$$<br>|\mathbf{v}|&#x3D;\sqrt{v_x^2+v_y^2+v_z^2}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝒗</mi><mo stretchy="false" form="postfix">∥</mo><mo>=</mo><msqrt><mrow><msubsup><mi>v</mi><mi>x</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>v</mi><mi>y</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>v</mi><mi>z</mi><mn>2</mn></msubsup></mrow></msqrt></mrow><annotation encoding="application/x-tex">\|\mathbf{v}\|=\sqrt{v_x^2+v_y^2+v_z^2}</annotation></semantics></math></p>
 <p>For example,</p>
-<p>$$<br>\mathbf{v}&#x3D;<br>\begin{bmatrix}<br>3\4<br>\end{bmatrix}<br>\quad\Rightarrow\quad<br>|\mathbf{v}|&#x3D;5<br>$$</p>
-<p>A unit vector has magnitude one. A nonzero vector can be normalized by dividing it by its magnitude:</p>
-<p>$$<br>\hat{\mathbf{v}}&#x3D;\frac{\mathbf{v}}{|\mathbf{v}|}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒗</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>3</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>4</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mspace width="1.0em"></mspace><mo>⇒</mo><mspace width="1.0em"></mspace><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝒗</mi><mo stretchy="false" form="postfix">∥</mo><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">\mathbf{v}=
+\begin{bmatrix}
+3\\4
+\end{bmatrix}
+\quad\Rightarrow\quad
+\|\mathbf{v}\|=5</annotation></semantics></math></p>
+<p>A unit vector has magnitude one. A nonzero vector can be normalized
+by dividing it by its magnitude:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi mathvariant="bold-italic">𝒗</mi><mo accent="true">̂</mo></mover><mo>=</mo><mfrac><mi mathvariant="bold-italic">𝒗</mi><mrow><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝒗</mi><mo stretchy="false" form="postfix">∥</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\hat{\mathbf{v}}=\frac{\mathbf{v}}{\|\mathbf{v}\|}</annotation></semantics></math></p>
 <p>For the example above,</p>
-<p>$$<br>\hat{\mathbf{v}}&#x3D;<br>\begin{bmatrix}<br>0.6\0.8<br>\end{bmatrix}<br>$$</p>
-<p>Unit vectors are useful for representing directions independently of magnitude, such as a desired tool orientation or a surface normal.</p>
-<p>Normalization requires a nonzero vector. In numerical implementations, vectors with magnitudes close to zero should be handled explicitly to avoid division by zero or unstable results.</p>
-<h3 id="Python-Implementation"><a href="#Python-Implementation" class="headerlink" title="Python Implementation"></a>Python Implementation</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">p1 = np.array([<span class="number">0.2</span>, <span class="number">0.3</span>], dtype=<span class="built_in">float</span>)</span><br><span class="line">p2 = np.array([<span class="number">0.7</span>, <span class="number">0.5</span>], dtype=<span class="built_in">float</span>)</span><br><span class="line"></span><br><span class="line">displacement = p2 - p1</span><br><span class="line">distance = np.linalg.norm(displacement)</span><br><span class="line"></span><br><span class="line">direction = displacement / distance</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Displacement:&quot;</span>, displacement)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Distance:&quot;</span>, distance)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Unit direction:&quot;</span>, direction)</span><br></pre></td></tr></table></figure>
-
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi mathvariant="bold-italic">𝒗</mi><mo accent="true">̂</mo></mover><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.6</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.8</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\hat{\mathbf{v}}=
+\begin{bmatrix}
+0.6\\0.8
+\end{bmatrix}</annotation></semantics></math></p>
+<p>Unit vectors are useful for representing directions independently of
+magnitude, such as a desired tool orientation or a surface normal.</p>
+<p>Normalization requires a nonzero vector. In numerical
+implementations, vectors with magnitudes close to zero should be handled
+explicitly to avoid division by zero or unstable results.</p>
+<h3 id="python-implementation">Python Implementation</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">p1 = np.array([<span class="number">0.2</span>, <span class="number">0.3</span>], dtype=<span class="built_in">float</span>)</span><br><span class="line">p2 = np.array([<span class="number">0.7</span>, <span class="number">0.5</span>], dtype=<span class="built_in">float</span>)</span><br><span class="line"></span><br><span class="line">displacement = p2 - p1</span><br><span class="line">distance = np.linalg.norm(displacement)</span><br><span class="line"></span><br><span class="line">direction = displacement / distance</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Displacement:&quot;</span>, displacement)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Distance:&quot;</span>, distance)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Unit direction:&quot;</span>, direction)</span><br></pre></td></tr></table></figure>
 <p>Expected output:</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Displacement: [0.5 0.2]</span><br><span class="line">Distance: 0.5385164807...</span><br><span class="line">Unit direction: [0.92847669 0.37139068]</span><br></pre></td></tr></table></figure>
-
-<p>The distance is the Euclidean distance between the two positions, while the unit direction points from the first position toward the second.</p>
-<hr>
-<h2 id="3-The-Dot-Product-Angles-Projections-and-Alignment"><a href="#3-The-Dot-Product-Angles-Projections-and-Alignment" class="headerlink" title="3. The Dot Product: Angles, Projections, and Alignment"></a>3. The Dot Product: Angles, Projections, and Alignment</h2><h3 id="3-1-Algebraic-Definition"><a href="#3-1-Algebraic-Definition" class="headerlink" title="3.1 Algebraic Definition"></a>3.1 Algebraic Definition</h3><p>For two vectors in two dimensions,</p>
-<p>$$<br>\mathbf{a}&#x3D;<br>\begin{bmatrix}<br>a_x\a_y<br>\end{bmatrix},<br>\qquad<br>\mathbf{b}&#x3D;<br>\begin{bmatrix}<br>b_x\b_y<br>\end{bmatrix}<br>$$</p>
+<p>The distance is the Euclidean distance between the two positions,
+while the unit direction points from the first position toward the
+second.</p>
+<hr />
+<h2 id="the-dot-product-angles-projections-and-alignment">3. The Dot
+Product: Angles, Projections, and Alignment</h2>
+<h3 id="algebraic-definition">3.1 Algebraic Definition</h3>
+<p>For two vectors in two dimensions,</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>y</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi mathvariant="bold-italic">𝒃</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>b</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>b</mi><mi>y</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{a}=
+\begin{bmatrix}
+a_x\\a_y
+\end{bmatrix},
+\qquad
+\mathbf{b}=
+\begin{bmatrix}
+b_x\\b_y
+\end{bmatrix}</annotation></semantics></math></p>
 <p>the dot product is</p>
-<p>$$<br>\mathbf{a}\cdot\mathbf{b}&#x3D;a_xb_x+a_yb_y<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>⋅</mo><mi mathvariant="bold-italic">𝒃</mi><mo>=</mo><msub><mi>a</mi><mi>x</mi></msub><msub><mi>b</mi><mi>x</mi></msub><mo>+</mo><msub><mi>a</mi><mi>y</mi></msub><msub><mi>b</mi><mi>y</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{a}\cdot\mathbf{b}=a_xb_x+a_yb_y</annotation></semantics></math></p>
 <p>In three dimensions, the definition becomes</p>
-<p>$$<br>\mathbf{a}\cdot\mathbf{b}<br>&#x3D;a_xb_x+a_yb_y+a_zb_z<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>⋅</mo><mi mathvariant="bold-italic">𝒃</mi><mo>=</mo><msub><mi>a</mi><mi>x</mi></msub><msub><mi>b</mi><mi>x</mi></msub><mo>+</mo><msub><mi>a</mi><mi>y</mi></msub><msub><mi>b</mi><mi>y</mi></msub><mo>+</mo><msub><mi>a</mi><mi>z</mi></msub><msub><mi>b</mi><mi>z</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{a}\cdot\mathbf{b}
+=a_xb_x+a_yb_y+a_zb_z</annotation></semantics></math></p>
 <p>The result is a scalar, not a vector.</p>
-<h3 id="3-2-Geometric-Interpretation"><a href="#3-2-Geometric-Interpretation" class="headerlink" title="3.2 Geometric Interpretation"></a>3.2 Geometric Interpretation</h3><p>The dot product is also related to the angle between two vectors:</p>
-<p>$$<br>\mathbf{a}\cdot\mathbf{b}<br>&#x3D;|\mathbf{a}||\mathbf{b}|\cos\theta<br>$$</p>
-<p>where $\theta$ is the angle between the vectors.</p>
+<h3 id="geometric-interpretation">3.2 Geometric Interpretation</h3>
+<p>The dot product is also related to the angle between two vectors:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>⋅</mo><mi mathvariant="bold-italic">𝒃</mi><mo>=</mo><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝒂</mi><mo stretchy="false" form="postfix">∥</mo><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝒃</mi><mo stretchy="false" form="postfix">∥</mo><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\mathbf{a}\cdot\mathbf{b}
+=\|\mathbf{a}\|\|\mathbf{b}\|\cos\theta</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
+is the angle between the vectors.</p>
 <p>This relationship provides a useful interpretation:</p>
 <ul>
 <li>If the dot product is positive, the angle is less than 90°.</li>
-<li>If the dot product is zero, the vectors are perpendicular, assuming both are nonzero.</li>
+<li>If the dot product is zero, the vectors are perpendicular, assuming
+both are nonzero.</li>
 <li>If the dot product is negative, the angle is greater than 90°.</li>
 </ul>
 <p>For two nonzero vectors, the angle can be calculated as</p>
-<p>$$<br>\theta&#x3D;<br>\cos^{-1}<br>\left(<br>\frac{\mathbf{a}\cdot\mathbf{b}}<br>{|\mathbf{a}||\mathbf{b}|}<br>\right)<br>$$</p>
-<p>In numerical code, the argument to the inverse cosine should be clipped to the interval $[-1,1]$, because floating-point rounding can produce values slightly outside that range.</p>
-<h3 id="3-3-Robotics-Application-Measuring-Alignment"><a href="#3-3-Robotics-Application-Measuring-Alignment" class="headerlink" title="3.3 Robotics Application: Measuring Alignment"></a>3.3 Robotics Application: Measuring Alignment</h3><p>Suppose a robot’s tool should move toward a target along a desired direction $\mathbf{d}$. The robot’s current motion direction is $\mathbf{v}$.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><msup><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>⋅</mo><mi mathvariant="bold-italic">𝒃</mi></mrow><mrow><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝒂</mi><mo stretchy="false" form="postfix">∥</mo><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝒃</mi><mo stretchy="false" form="postfix">∥</mo></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\theta=
+\cos^{-1}
+\left(
+\frac{\mathbf{a}\cdot\mathbf{b}}
+{\|\mathbf{a}\|\|\mathbf{b}\|}
+\right)</annotation></semantics></math></p>
+<p>In numerical code, the argument to the inverse cosine should be
+clipped to the interval
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[-1,1]</annotation></semantics></math>,
+because floating-point rounding can produce values slightly outside that
+range.</p>
+<h3 id="robotics-application-measuring-alignment">3.3 Robotics
+Application: Measuring Alignment</h3>
+<p>Suppose a robot’s tool should move toward a target along a desired
+direction
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒅</mi><annotation encoding="application/x-tex">\mathbf{d}</annotation></semantics></math>.
+The robot’s current motion direction is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒗</mi><annotation encoding="application/x-tex">\mathbf{v}</annotation></semantics></math>.</p>
 <p>After normalizing both vectors, their dot product is</p>
-<p>$$<br>\hat{\mathbf{v}}\cdot\hat{\mathbf{d}}&#x3D;\cos\theta<br>$$</p>
-<p>If the result is close to 1, the robot is moving in approximately the desired direction. If it is close to -1, the robot is moving in the opposite direction.</p>
-<p>This calculation is useful in motion tracking, direction alignment, and geometric constraints.</p>
-<h3 id="3-4-Robotics-Application-Projection"><a href="#3-4-Robotics-Application-Projection" class="headerlink" title="3.4 Robotics Application: Projection"></a>3.4 Robotics Application: Projection</h3><p>The scalar projection of vector $\mathbf{a}$ onto a nonzero vector $\mathbf{b}$ is</p>
-<p>$$<br>\operatorname{comp}_{\mathbf{b}}(\mathbf{a})<br>&#x3D;\frac{\mathbf{a}\cdot\mathbf{b}}{|\mathbf{b}|}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi mathvariant="bold-italic">𝒗</mi><mo accent="true">̂</mo></mover><mo>⋅</mo><mover><mi mathvariant="bold-italic">𝒅</mi><mo accent="true">̂</mo></mover><mo>=</mo><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\hat{\mathbf{v}}\cdot\hat{\mathbf{d}}=\cos\theta</annotation></semantics></math></p>
+<p>If the result is close to 1, the robot is moving in approximately the
+desired direction. If it is close to -1, the robot is moving in the
+opposite direction.</p>
+<p>This calculation is useful in motion tracking, direction alignment,
+and geometric constraints.</p>
+<h3 id="robotics-application-projection">3.4 Robotics Application:
+Projection</h3>
+<p>The scalar projection of vector
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒂</mi><annotation encoding="application/x-tex">\mathbf{a}</annotation></semantics></math>
+onto a nonzero vector
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒃</mi><annotation encoding="application/x-tex">\mathbf{b}</annotation></semantics></math>
+is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">comp</mi><mo>&#8289;</mo></mrow><mi mathvariant="bold-italic">𝒃</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒂</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>⋅</mo><mi mathvariant="bold-italic">𝒃</mi></mrow><mrow><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝒃</mi><mo stretchy="false" form="postfix">∥</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\operatorname{comp}_{\mathbf{b}}(\mathbf{a})
+=\frac{\mathbf{a}\cdot\mathbf{b}}{\|\mathbf{b}\|}</annotation></semantics></math></p>
 <p>The vector projection is</p>
-<h1 id="operatorname-proj-mathbf-b-mathbf-a"><a href="#operatorname-proj-mathbf-b-mathbf-a" class="headerlink" title="$$\operatorname{proj}_{\mathbf{b}}(\mathbf{a})"></a>$$<br>\operatorname{proj}_{\mathbf{b}}(\mathbf{a})</h1><p>\frac{\mathbf{a}\cdot\mathbf{b}}<br>{\mathbf{b}\cdot\mathbf{b}}\mathbf{b}<br>$$</p>
-<p>Projection is useful when decomposing a force or velocity into components parallel and perpendicular to a surface, path, or direction of motion.</p>
-<h3 id="Python-Implementation-1"><a href="#Python-Implementation-1" class="headerlink" title="Python Implementation"></a>Python Implementation</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">a = np.array([<span class="number">1.0</span>, <span class="number">2.0</span>])</span><br><span class="line">b = np.array([<span class="number">3.0</span>, <span class="number">4.0</span>])</span><br><span class="line"></span><br><span class="line">dot_product = np.dot(a, b)</span><br><span class="line"></span><br><span class="line">cos_theta = dot_product / (</span><br><span class="line">    np.linalg.norm(a) * np.linalg.norm(b)</span><br><span class="line">)</span><br><span class="line">cos_theta = np.clip(cos_theta, -<span class="number">1.0</span>, <span class="number">1.0</span>)</span><br><span class="line"></span><br><span class="line">angle_rad = np.arccos(cos_theta)</span><br><span class="line">angle_deg = np.degrees(angle_rad)</span><br><span class="line"></span><br><span class="line">projection = (np.dot(a, b) / np.dot(b, b)) * b</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Dot product:&quot;</span>, dot_product)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Angle (degrees):&quot;</span>, angle_deg)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Projection of a onto b:&quot;</span>, projection)</span><br></pre></td></tr></table></figure>
-
-<p>The dot product is 11. The angle between the vectors is approximately 10.3°, indicating that they point in similar directions.</p>
-<hr>
-<h2 id="4-The-Cross-Product-Perpendicular-Directions-and-Rotational-Effects"><a href="#4-The-Cross-Product-Perpendicular-Directions-and-Rotational-Effects" class="headerlink" title="4. The Cross Product: Perpendicular Directions and Rotational Effects"></a>4. The Cross Product: Perpendicular Directions and Rotational Effects</h2><h3 id="4-1-Definition"><a href="#4-1-Definition" class="headerlink" title="4.1 Definition"></a>4.1 Definition</h3><p>Unlike the dot product, the conventional cross product is defined for vectors in three-dimensional space.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">proj</mi><mo>&#8289;</mo></mrow><mi mathvariant="bold-italic">𝒃</mi></msub><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒂</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>⋅</mo><mi mathvariant="bold-italic">𝒃</mi></mrow><mrow><mi mathvariant="bold-italic">𝒃</mi><mo>⋅</mo><mi mathvariant="bold-italic">𝒃</mi></mrow></mfrac><mi mathvariant="bold-italic">𝒃</mi></mrow><annotation encoding="application/x-tex">\operatorname{proj}_{\mathbf{b}}(\mathbf{a})
+=
+\frac{\mathbf{a}\cdot\mathbf{b}}
+{\mathbf{b}\cdot\mathbf{b}}\mathbf{b}</annotation></semantics></math></p>
+<p>Projection is useful when decomposing a force or velocity into
+components parallel and perpendicular to a surface, path, or direction
+of motion.</p>
+<h3 id="python-implementation-1">Python Implementation</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">a = np.array([<span class="number">1.0</span>, <span class="number">2.0</span>])</span><br><span class="line">b = np.array([<span class="number">3.0</span>, <span class="number">4.0</span>])</span><br><span class="line"></span><br><span class="line">dot_product = np.dot(a, b)</span><br><span class="line"></span><br><span class="line">cos_theta = dot_product / (</span><br><span class="line">    np.linalg.norm(a) * np.linalg.norm(b)</span><br><span class="line">)</span><br><span class="line">cos_theta = np.clip(cos_theta, -<span class="number">1.0</span>, <span class="number">1.0</span>)</span><br><span class="line"></span><br><span class="line">angle_rad = np.arccos(cos_theta)</span><br><span class="line">angle_deg = np.degrees(angle_rad)</span><br><span class="line"></span><br><span class="line">projection = (np.dot(a, b) / np.dot(b, b)) * b</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Dot product:&quot;</span>, dot_product)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Angle (degrees):&quot;</span>, angle_deg)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Projection of a onto b:&quot;</span>, projection)</span><br></pre></td></tr></table></figure>
+<p>The dot product is 11. The angle between the vectors is approximately
+10.3°, indicating that they point in similar directions.</p>
+<hr />
+<h2
+id="the-cross-product-perpendicular-directions-and-rotational-effects">4.
+The Cross Product: Perpendicular Directions and Rotational Effects</h2>
+<h3 id="definition">4.1 Definition</h3>
+<p>Unlike the dot product, the conventional cross product is defined for
+vectors in three-dimensional space.</p>
 <p>For</p>
-<p>$$<br>\mathbf{a}&#x3D;<br>\begin{bmatrix}<br>a_x\a_y\a_z<br>\end{bmatrix},<br>\qquad<br>\mathbf{b}&#x3D;<br>\begin{bmatrix}<br>b_x\b_y\b_z<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>y</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>z</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi mathvariant="bold-italic">𝒃</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>b</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>b</mi><mi>y</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>b</mi><mi>z</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{a}=
+\begin{bmatrix}
+a_x\\a_y\\a_z
+\end{bmatrix},
+\qquad
+\mathbf{b}=
+\begin{bmatrix}
+b_x\\b_y\\b_z
+\end{bmatrix}</annotation></semantics></math></p>
 <p>their cross product is</p>
-<h1 id="mathbf-a-times-mathbf-b"><a href="#mathbf-a-times-mathbf-b" class="headerlink" title="$$\mathbf{a}\times\mathbf{b}"></a>$$<br>\mathbf{a}\times\mathbf{b}</h1><p>\begin{bmatrix}<br>a_yb_z-a_zb_y\<br>a_zb_x-a_xb_z\<br>a_xb_y-a_yb_x<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>×</mo><mi mathvariant="bold-italic">𝒃</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>y</mi></msub><msub><mi>b</mi><mi>z</mi></msub><mo>−</mo><msub><mi>a</mi><mi>z</mi></msub><msub><mi>b</mi><mi>y</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>z</mi></msub><msub><mi>b</mi><mi>x</mi></msub><mo>−</mo><msub><mi>a</mi><mi>x</mi></msub><msub><mi>b</mi><mi>z</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>x</mi></msub><msub><mi>b</mi><mi>y</mi></msub><mo>−</mo><msub><mi>a</mi><mi>y</mi></msub><msub><mi>b</mi><mi>x</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{a}\times\mathbf{b}
+=
+\begin{bmatrix}
+a_yb_z-a_zb_y\\
+a_zb_x-a_xb_z\\
+a_xb_y-a_yb_x
+\end{bmatrix}</annotation></semantics></math></p>
 <p>The result is a vector perpendicular to both input vectors.</p>
 <p>Its magnitude is</p>
-<p>$$<br>|\mathbf{a}\times\mathbf{b}|<br>&#x3D;|\mathbf{a}||\mathbf{b}|\sin\theta<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝒂</mi><mo>×</mo><mi mathvariant="bold-italic">𝒃</mi><mo stretchy="false" form="postfix">∥</mo><mo>=</mo><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝒂</mi><mo stretchy="false" form="postfix">∥</mo><mo stretchy="false" form="postfix">∥</mo><mi mathvariant="bold-italic">𝒃</mi><mo stretchy="false" form="postfix">∥</mo><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\|\mathbf{a}\times\mathbf{b}\|
+=\|\mathbf{a}\|\|\mathbf{b}\|\sin\theta</annotation></semantics></math></p>
 <p>The direction follows the right-hand rule.</p>
-<h3 id="4-2-Geometric-Interpretation"><a href="#4-2-Geometric-Interpretation" class="headerlink" title="4.2 Geometric Interpretation"></a>4.2 Geometric Interpretation</h3><p>The magnitude of the cross product equals the area of the parallelogram spanned by the two vectors.</p>
-<p>If the vectors are parallel, the cross product is zero. If they are perpendicular, its magnitude equals the product of their magnitudes.</p>
+<h3 id="geometric-interpretation-1">4.2 Geometric Interpretation</h3>
+<p>The magnitude of the cross product equals the area of the
+parallelogram spanned by the two vectors.</p>
+<p>If the vectors are parallel, the cross product is zero. If they are
+perpendicular, its magnitude equals the product of their magnitudes.</p>
 <p>The cross product is also anti-commutative:</p>
-<p>$$<br>\mathbf{a}\times\mathbf{b}<br>&#x3D;-(\mathbf{b}\times\mathbf{a})<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>×</mo><mi mathvariant="bold-italic">𝒃</mi><mo>=</mo><mi>−</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒃</mi><mo>×</mo><mi mathvariant="bold-italic">𝒂</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{a}\times\mathbf{b}
+=-(\mathbf{b}\times\mathbf{a})</annotation></semantics></math></p>
 <p>Changing the order reverses the direction.</p>
-<h3 id="4-3-Robotics-Application-Calculating-Torque"><a href="#4-3-Robotics-Application-Calculating-Torque" class="headerlink" title="4.3 Robotics Application: Calculating Torque"></a>4.3 Robotics Application: Calculating Torque</h3><p>One of the most important uses of the cross product in robotics is calculating torque.</p>
-<p>If a force $\mathbf{F}$ is applied at a position offset $\mathbf{r}$ from a reference point, the torque about that point is</p>
-<p>$$<br>\pmb{\tau} &#x3D; \mathbf{r} \times \mathbf{F}<br>$$</p>
-<p>Here, $\mathbf{r}$ is the displacement from the reference point to the point where the force is applied.</p>
+<h3 id="robotics-application-calculating-torque">4.3 Robotics
+Application: Calculating Torque</h3>
+<p>One of the most important uses of the cross product in robotics is
+calculating torque.</p>
+<p>If a force
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝑭</mi><annotation encoding="application/x-tex">\mathbf{F}</annotation></semantics></math>
+is applied at a position offset
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒓</mi><annotation encoding="application/x-tex">\mathbf{r}</annotation></semantics></math>
+from a reference point, the torque about that point is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝝉</mi><mo>=</mo><mi mathvariant="bold-italic">𝒓</mi><mo>×</mo><mi mathvariant="bold-italic">𝑭</mi></mrow><annotation encoding="application/x-tex">\pmb{\tau} = \mathbf{r} \times \mathbf{F}</annotation></semantics></math></p>
+<p>Here,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝒓</mi><annotation encoding="application/x-tex">\mathbf{r}</annotation></semantics></math>
+is the displacement from the reference point to the point where the
+force is applied.</p>
 <p>For example, consider a force applied to the end of a robot arm:</p>
-<p>$$<br>\mathbf{r}&#x3D;<br>\begin{bmatrix}<br>0.5\0\0<br>\end{bmatrix}<br>\text{ m},<br>\qquad<br>\mathbf{F}&#x3D;<br>\begin{bmatrix}<br>0\10\0<br>\end{bmatrix}<br>\text{ N}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒓</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.5</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> m</mtext></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi mathvariant="bold-italic">𝑭</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>10</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> N</mtext></mrow></mrow><annotation encoding="application/x-tex">\mathbf{r}=
+\begin{bmatrix}
+0.5\\0\\0
+\end{bmatrix}
+\text{ m},
+\qquad
+\mathbf{F}=
+\begin{bmatrix}
+0\\10\\0
+\end{bmatrix}
+\text{ N}</annotation></semantics></math></p>
 <p>Then,</p>
-<h1 id="pmb-tau"><a href="#pmb-tau" class="headerlink" title="$$\pmb{\tau}"></a>$$<br>\pmb{\tau}</h1><p>\begin{bmatrix}<br>0\0\5<br>\end{bmatrix}<br>\text{ N}\cdot\text{m}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝝉</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>5</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> N</mtext></mrow><mo>⋅</mo><mtext mathvariant="normal">m</mtext></mrow><annotation encoding="application/x-tex">\pmb{\tau}
+=
+\begin{bmatrix}
+0\\0\\5
+\end{bmatrix}
+\text{ N}\cdot\text{m}</annotation></semantics></math></p>
 <p>The force creates a torque about the z-axis.</p>
-<p>This relationship appears in manipulator statics, wrench transformations, and robot dynamics.</p>
-<h3 id="4-4-The-Two-Dimensional-Case"><a href="#4-4-The-Two-Dimensional-Case" class="headerlink" title="4.4 The Two-Dimensional Case"></a>4.4 The Two-Dimensional Case</h3><p>In planar robotics, vectors are often represented using only x and y components. Their three-dimensional cross product still has a meaningful interpretation if both vectors are embedded in the xy-plane:</p>
-<h1 id="begin-bmatrix-a-x-a-y-0-end-bmatrix-times-begin-bmatrix-b-x-b-y-0-end-bmatrix"><a href="#begin-bmatrix-a-x-a-y-0-end-bmatrix-times-begin-bmatrix-b-x-b-y-0-end-bmatrix" class="headerlink" title="$$\begin{bmatrix}a_x\a_y\0\end{bmatrix}\times\begin{bmatrix}b_x\b_y\0\end{bmatrix}"></a>$$<br>\begin{bmatrix}<br>a_x\a_y\0<br>\end{bmatrix}<br>\times<br>\begin{bmatrix}<br>b_x\b_y\0<br>\end{bmatrix}</h1><p>\begin{bmatrix}<br>0\0\a_xb_y-a_yb_x<br>\end{bmatrix}<br>$$</p>
-<p>The z-component indicates the signed magnitude of the planar cross product. Its sign distinguishes clockwise from counterclockwise orientation under the usual right-handed coordinate convention.</p>
-<h3 id="Python-Implementation-2"><a href="#Python-Implementation-2" class="headerlink" title="Python Implementation"></a>Python Implementation</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">r = np.array([<span class="number">0.5</span>, <span class="number">0.0</span>, <span class="number">0.0</span>])</span><br><span class="line">force = np.array([<span class="number">0.0</span>, <span class="number">10.0</span>, <span class="number">0.0</span>])</span><br><span class="line"></span><br><span class="line">torque = np.cross(r, force)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Torque:&quot;</span>, torque)</span><br></pre></td></tr></table></figure>
-
+<p>This relationship appears in manipulator statics, wrench
+transformations, and robot dynamics.</p>
+<h3 id="the-two-dimensional-case">4.4 The Two-Dimensional Case</h3>
+<p>In planar robotics, vectors are often represented using only x and y
+components. Their three-dimensional cross product still has a meaningful
+interpretation if both vectors are embedded in the xy-plane:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>y</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>×</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>b</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>b</mi><mi>y</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>x</mi></msub><msub><mi>b</mi><mi>y</mi></msub><mo>−</mo><msub><mi>a</mi><mi>y</mi></msub><msub><mi>b</mi><mi>x</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{bmatrix}
+a_x\\a_y\\0
+\end{bmatrix}
+\times
+\begin{bmatrix}
+b_x\\b_y\\0
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\0\\a_xb_y-a_yb_x
+\end{bmatrix}</annotation></semantics></math></p>
+<p>The z-component indicates the signed magnitude of the planar cross
+product. Its sign distinguishes clockwise from counterclockwise
+orientation under the usual right-handed coordinate convention.</p>
+<h3 id="python-implementation-2">Python Implementation</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">r = np.array([<span class="number">0.5</span>, <span class="number">0.0</span>, <span class="number">0.0</span>])</span><br><span class="line">force = np.array([<span class="number">0.0</span>, <span class="number">10.0</span>, <span class="number">0.0</span>])</span><br><span class="line"></span><br><span class="line">torque = np.cross(r, force)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Torque:&quot;</span>, torque)</span><br></pre></td></tr></table></figure>
 <p>Expected output:</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Torque: [0. 0. 5.]</span><br></pre></td></tr></table></figure>
-
-<p>This example assumes that both vectors are expressed in the same coordinate frame.</p>
-<hr>
-<h2 id="5-Matrices-Representing-Linear-Transformations"><a href="#5-Matrices-Representing-Linear-Transformations" class="headerlink" title="5. Matrices: Representing Linear Transformations"></a>5. Matrices: Representing Linear Transformations</h2><h3 id="5-1-What-Is-a-Matrix"><a href="#5-1-What-Is-a-Matrix" class="headerlink" title="5.1 What Is a Matrix?"></a>5.1 What Is a Matrix?</h3><p>A matrix is a rectangular array of numbers. For example,</p>
-<p>$$<br>\mathbf{A}&#x3D;<br>\begin{bmatrix}<br>a_{11}&amp;a_{12}\<br>a_{21}&amp;a_{22}<br>\end{bmatrix}<br>$$</p>
-<p>A matrix can represent a linear transformation: a rule that maps an input vector to an output vector.</p>
+<p>This example assumes that both vectors are expressed in the same
+coordinate frame.</p>
+<hr />
+<h2 id="matrices-representing-linear-transformations">5. Matrices:
+Representing Linear Transformations</h2>
+<h3 id="what-is-a-matrix">5.1 What Is a Matrix?</h3>
+<p>A matrix is a rectangular array of numbers. For example,</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑨</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mn>11</mn></msub></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mn>12</mn></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mn>21</mn></msub></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mn>22</mn></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{A}=
+\begin{bmatrix}
+a_{11}&amp;a_{12}\\
+a_{21}&amp;a_{22}
+\end{bmatrix}</annotation></semantics></math></p>
+<p>A matrix can represent a linear transformation: a rule that maps an
+input vector to an output vector.</p>
 <p>For a two-dimensional vector,</p>
-<p>$$<br>\mathbf{v}&#x3D;<br>\begin{bmatrix}<br>x \<br>y<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒗</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>x</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>y</mi></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{v}=
+\begin{bmatrix}
+x \\
+y
+\end{bmatrix}</annotation></semantics></math></p>
 <p>the transformed vector is</p>
-<p>$$<br>\mathbf{v}’ &#x3D; \mathbf{A}\mathbf{v}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝒗</mi><mo>′</mo></msup><mo>=</mo><mi mathvariant="bold-italic">𝑨</mi><mi mathvariant="bold-italic">𝒗</mi></mrow><annotation encoding="application/x-tex">\mathbf{v}&#39; = \mathbf{A}\mathbf{v}</annotation></semantics></math></p>
 <p>Expanding the multiplication gives</p>
-<h1 id="begin-bmatrix-x’-y’-end-bmatrix"><a href="#begin-bmatrix-x’-y’-end-bmatrix" class="headerlink" title="$$\begin{bmatrix}x’ \y’\end{bmatrix}"></a>$$<br>\begin{bmatrix}<br>x’ \<br>y’<br>\end{bmatrix}</h1><p>\begin{bmatrix}<br>a_{11}x + a_{12}y \<br>a_{21}x + a_{22}y<br>\end{bmatrix}<br>$$</p>
-<p>The matrix determines how the original vector is mapped to a new vector.</p>
-<p>Depending on its structure, a matrix can represent scaling, reflection, rotation, shear, or combinations of these operations.</p>
-<h3 id="5-2-Scaling"><a href="#5-2-Scaling" class="headerlink" title="5.2 Scaling"></a>5.2 Scaling</h3><p>A two-dimensional scaling matrix is</p>
-<p>$$<br>\mathbf{S}&#x3D;<br>\begin{bmatrix}<br>s_x &amp; 0 \<br>0 &amp; s_y<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msup><mi>x</mi><mo>′</mo></msup></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msup><mi>y</mi><mo>′</mo></msup></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mn>11</mn></msub><mi>x</mi><mo>+</mo><msub><mi>a</mi><mn>12</mn></msub><mi>y</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mn>21</mn></msub><mi>x</mi><mo>+</mo><msub><mi>a</mi><mn>22</mn></msub><mi>y</mi></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{bmatrix}
+x&#39; \\
+y&#39;
+\end{bmatrix}
+=
+\begin{bmatrix}
+a_{11}x + a_{12}y \\
+a_{21}x + a_{22}y
+\end{bmatrix}</annotation></semantics></math></p>
+<p>The matrix determines how the original vector is mapped to a new
+vector.</p>
+<p>Depending on its structure, a matrix can represent scaling,
+reflection, rotation, shear, or combinations of these operations.</p>
+<h3 id="scaling">5.2 Scaling</h3>
+<p>A two-dimensional scaling matrix is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑺</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>s</mi><mi>x</mi></msub></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>s</mi><mi>y</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{S}=
+\begin{bmatrix}
+s_x &amp; 0 \\
+0 &amp; s_y
+\end{bmatrix}</annotation></semantics></math></p>
 <p>Applying it gives</p>
-<h1 id="begin-bmatrix-x’-y’-end-bmatrix-1"><a href="#begin-bmatrix-x’-y’-end-bmatrix-1" class="headerlink" title="$$\begin{bmatrix}x’ \y’\end{bmatrix}"></a>$$<br>\begin{bmatrix}<br>x’ \<br>y’<br>\end{bmatrix}</h1><p>\begin{bmatrix}<br>s_x x \<br>s_y y<br>\end{bmatrix}<br>$$</p>
-<p>If $s_x &#x3D; s_y &#x3D; 2$, both coordinates are doubled.</p>
-<p>Scaling is useful in geometric modeling and data visualization. However, scaling is not generally a rigid-body transformation because it changes lengths.</p>
-<h3 id="5-3-Rotation-in-Two-Dimensions"><a href="#5-3-Rotation-in-Two-Dimensions" class="headerlink" title="5.3 Rotation in Two Dimensions"></a>5.3 Rotation in Two Dimensions</h3><p>A rotation by angle $\theta$ about the origin is represented by</p>
-<p>$$<br>\mathbf{R}(\theta)&#x3D;<br>\begin{bmatrix}<br>\cos\theta&amp;-\sin\theta\<br>\sin\theta&amp;\cos\theta<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msup><mi>x</mi><mo>′</mo></msup></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msup><mi>y</mi><mo>′</mo></msup></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>s</mi><mi>x</mi></msub><mi>x</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>s</mi><mi>y</mi></msub><mi>y</mi></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{bmatrix}
+x&#39; \\
+y&#39;
+\end{bmatrix}
+=
+\begin{bmatrix}
+s_x x \\
+s_y y
+\end{bmatrix}</annotation></semantics></math></p>
+<p>If
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>x</mi></msub><mo>=</mo><msub><mi>s</mi><mi>y</mi></msub><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">s_x = s_y = 2</annotation></semantics></math>,
+both coordinates are doubled.</p>
+<p>Scaling is useful in geometric modeling and data visualization.
+However, scaling is not generally a rigid-body transformation because it
+changes lengths.</p>
+<h3 id="rotation-in-two-dimensions">5.3 Rotation in Two Dimensions</h3>
+<p>A rotation by angle
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
+about the origin is represented by</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑹</mi><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mtd><mtd columnalign="center" style="text-align: center"><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{R}(\theta)=
+\begin{bmatrix}
+\cos\theta&amp;-\sin\theta\\
+\sin\theta&amp;\cos\theta
+\end{bmatrix}</annotation></semantics></math></p>
 <p>Therefore,</p>
-<h1 id="begin-bmatrix-x’-y’-end-bmatrix-2"><a href="#begin-bmatrix-x’-y’-end-bmatrix-2" class="headerlink" title="$$\begin{bmatrix}x’\y’\end{bmatrix}"></a>$$<br>\begin{bmatrix}<br>x’\y’<br>\end{bmatrix}</h1><p>\begin{bmatrix}<br>x\cos\theta-y\sin\theta\<br>x\sin\theta+y\cos\theta<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msup><mi>x</mi><mo>′</mo></msup></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msup><mi>y</mi><mo>′</mo></msup></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>x</mi><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi><mo>−</mo><mi>y</mi><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>x</mi><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>θ</mi><mo>+</mo><mi>y</mi><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{bmatrix}
+x&#39;\\y&#39;
+\end{bmatrix}
+=
+\begin{bmatrix}
+x\cos\theta-y\sin\theta\\
+x\sin\theta+y\cos\theta
+\end{bmatrix}</annotation></semantics></math></p>
 <p>For a counterclockwise rotation of 90°,</p>
-<p>$$<br>\mathbf{R}(90^\circ)&#x3D;<br>\begin{bmatrix}<br>0&amp;-1\<br>1&amp;0<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑹</mi><mo stretchy="false" form="prefix">(</mo><msup><mn>90</mn><mo>∘</mo></msup><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{R}(90^\circ)=
+\begin{bmatrix}
+0&amp;-1\\
+1&amp;0
+\end{bmatrix}</annotation></semantics></math></p>
 <p>Applying this matrix to the vector</p>
-<p>$$<br>\mathbf{v}&#x3D;<br>\begin{bmatrix}<br>1\0<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒗</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{v}=
+\begin{bmatrix}
+1\\0
+\end{bmatrix}</annotation></semantics></math></p>
 <p>produces</p>
-<p>$$<br>\mathbf{v}’&#x3D;<br>\begin{bmatrix}<br>0\1<br>\end{bmatrix}<br>$$</p>
-<p>The vector originally pointing along the positive x-axis now points along the positive y-axis.</p>
-<p>In NumPy, trigonometric functions use radians rather than degrees.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝒗</mi><mo>′</mo></msup><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{v}&#39;=
+\begin{bmatrix}
+0\\1
+\end{bmatrix}</annotation></semantics></math></p>
+<p>The vector originally pointing along the positive x-axis now points
+along the positive y-axis.</p>
+<p>In NumPy, trigonometric functions use radians rather than
+degrees.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">theta = np.deg2rad(<span class="number">90</span>)</span><br><span class="line"></span><br><span class="line">R = np.array([</span><br><span class="line">    [np.cos(theta), -np.sin(theta)],</span><br><span class="line">    [np.sin(theta),  np.cos(theta)]</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">v = np.array([<span class="number">1.0</span>, <span class="number">0.0</span>])</span><br><span class="line">v_rotated = R @ v</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(v_rotated)</span><br></pre></td></tr></table></figure>
-
 <p>Expected output, up to floating-point precision:</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[0. 1.]</span><br></pre></td></tr></table></figure>
-
 <p>The <code>@</code> operator performs matrix multiplication.</p>
-<h3 id="5-4-Why-Rotation-Matrices-Matter-in-Robotics"><a href="#5-4-Why-Rotation-Matrices-Matter-in-Robotics" class="headerlink" title="5.4 Why Rotation Matrices Matter in Robotics"></a>5.4 Why Rotation Matrices Matter in Robotics</h3><p>A robot’s joints and links have different orientations. To determine the position of one component relative to another, the robot must account for these orientations.</p>
-<p>Rotation matrices provide a precise way to express how coordinates change under a rotation.</p>
+<h3 id="why-rotation-matrices-matter-in-robotics">5.4 Why Rotation
+Matrices Matter in Robotics</h3>
+<p>A robot’s joints and links have different orientations. To determine
+the position of one component relative to another, the robot must
+account for these orientations.</p>
+<p>Rotation matrices provide a precise way to express how coordinates
+change under a rotation.</p>
 <p>A valid rotation matrix has two important properties:</p>
-<p>$$<br>\mathbf{R}^{T}\mathbf{R}&#x3D;\mathbf{I}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑹</mi><mi>T</mi></msup><mi mathvariant="bold-italic">𝑹</mi><mo>=</mo><mi mathvariant="bold-italic">𝑰</mi></mrow><annotation encoding="application/x-tex">\mathbf{R}^{T}\mathbf{R}=\mathbf{I}</annotation></semantics></math></p>
 <p>and</p>
-<p>$$<br>\det(\mathbf{R})&#x3D;1<br>$$</p>
-<p>The first property means that the matrix is orthogonal: its columns form an orthonormal basis. The second distinguishes proper rotations from reflections.</p>
-<p>These properties imply that a rotation preserves vector lengths and angles.</p>
-<p>Rotation matrices are fundamental to robot kinematics, computer vision, inertial measurement processing, and coordinate-frame transformations.</p>
-<hr>
-<h2 id="6-Matrix-Multiplication-and-Transformation-Order"><a href="#6-Matrix-Multiplication-and-Transformation-Order" class="headerlink" title="6. Matrix Multiplication and Transformation Order"></a>6. Matrix Multiplication and Transformation Order</h2><h3 id="6-1-Matrix-Multiplication"><a href="#6-1-Matrix-Multiplication" class="headerlink" title="6.1 Matrix Multiplication"></a>6.1 Matrix Multiplication</h3><p>Given two compatible matrices $\mathbf{A}$ and $\mathbf{B}$, their product is written as</p>
-<p>$$<br>\mathbf{C}&#x3D;\mathbf{A}\mathbf{B}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">det</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝑹</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\det(\mathbf{R})=1</annotation></semantics></math></p>
+<p>The first property means that the matrix is orthogonal: its columns
+form an orthonormal basis. The second distinguishes proper rotations
+from reflections.</p>
+<p>These properties imply that a rotation preserves vector lengths and
+angles.</p>
+<p>Rotation matrices are fundamental to robot kinematics, computer
+vision, inertial measurement processing, and coordinate-frame
+transformations.</p>
+<hr />
+<h2 id="matrix-multiplication-and-transformation-order">6. Matrix
+Multiplication and Transformation Order</h2>
+<h3 id="matrix-multiplication">6.1 Matrix Multiplication</h3>
+<p>Given two compatible matrices
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝑨</mi><annotation encoding="application/x-tex">\mathbf{A}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝑩</mi><annotation encoding="application/x-tex">\mathbf{B}</annotation></semantics></math>,
+their product is written as</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑪</mi><mo>=</mo><mi mathvariant="bold-italic">𝑨</mi><mi mathvariant="bold-italic">𝑩</mi></mrow><annotation encoding="application/x-tex">\mathbf{C}=\mathbf{A}\mathbf{B}</annotation></semantics></math></p>
 <p>Matrix multiplication is generally not commutative:</p>
-<p>$$<br>\mathbf{A}\mathbf{B}\neq\mathbf{B}\mathbf{A}<br>$$</p>
-<p>This is one of the most important facts to understand when working with robot transformations.</p>
-<p>The order of operations matters because rotating and then translating a point can produce a different result from translating and then rotating it.</p>
-<h3 id="6-2-A-Simple-Example"><a href="#6-2-A-Simple-Example" class="headerlink" title="6.2 A Simple Example"></a>6.2 A Simple Example</h3><p>Suppose we rotate a point by 90° and then translate it by</p>
-<p>$$<br>\mathbf{t}&#x3D;<br>\begin{bmatrix}<br>2\0<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑨</mi><mi mathvariant="bold-italic">𝑩</mi><mo>≠</mo><mi mathvariant="bold-italic">𝑩</mi><mi mathvariant="bold-italic">𝑨</mi></mrow><annotation encoding="application/x-tex">\mathbf{A}\mathbf{B}\neq\mathbf{B}\mathbf{A}</annotation></semantics></math></p>
+<p>This is one of the most important facts to understand when working
+with robot transformations.</p>
+<p>The order of operations matters because rotating and then translating
+a point can produce a different result from translating and then
+rotating it.</p>
+<h3 id="a-simple-example">6.2 A Simple Example</h3>
+<p>Suppose we rotate a point by 90° and then translate it by</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒕</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{t}=
+\begin{bmatrix}
+2\\0
+\end{bmatrix}</annotation></semantics></math></p>
 <p>Let the initial point be</p>
-<p>$$<br>\mathbf{p}&#x3D;<br>\begin{bmatrix}<br>1\0<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒑</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{p}=
+\begin{bmatrix}
+1\\0
+\end{bmatrix}</annotation></semantics></math></p>
 <p>Rotating first gives</p>
-<p>$$<br>\mathbf{R}\mathbf{p}&#x3D;<br>\begin{bmatrix}<br>0\1<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑹</mi><mi mathvariant="bold-italic">𝒑</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{R}\mathbf{p}=
+\begin{bmatrix}
+0\\1
+\end{bmatrix}</annotation></semantics></math></p>
 <p>Then translating gives</p>
-<h1 id="mathbf-p-’-begin-bmatrix-0-1-end-bmatrix-begin-bmatrix-2-0-end-bmatrix"><a href="#mathbf-p-’-begin-bmatrix-0-1-end-bmatrix-begin-bmatrix-2-0-end-bmatrix" class="headerlink" title="$$\mathbf{p}’&#x3D;\begin{bmatrix}0\1\end{bmatrix}+\begin{bmatrix}2\0\end{bmatrix}"></a>$$<br>\mathbf{p}’&#x3D;<br>\begin{bmatrix}<br>0\1<br>\end{bmatrix}<br>+<br>\begin{bmatrix}<br>2\0<br>\end{bmatrix}</h1><p>\begin{bmatrix}<br>2\1<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝒑</mi><mo>′</mo></msup><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{p}&#39;=
+\begin{bmatrix}
+0\\1
+\end{bmatrix}
++
+\begin{bmatrix}
+2\\0
+\end{bmatrix}
+=
+\begin{bmatrix}
+2\\1
+\end{bmatrix}</annotation></semantics></math></p>
 <p>If we translate first, we obtain</p>
-<p>$$<br>\mathbf{p}+\mathbf{t}&#x3D;<br>\begin{bmatrix}<br>3\0<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒑</mi><mo>+</mo><mi mathvariant="bold-italic">𝒕</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>3</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{p}+\mathbf{t}=
+\begin{bmatrix}
+3\\0
+\end{bmatrix}</annotation></semantics></math></p>
 <p>Rotating this result gives</p>
-<p>$$<br>\mathbf{R}(\mathbf{p}+\mathbf{t})&#x3D;<br>\begin{bmatrix}<br>0\3<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑹</mi><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝒑</mi><mo>+</mo><mi mathvariant="bold-italic">𝒕</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>3</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{R}(\mathbf{p}+\mathbf{t})=
+\begin{bmatrix}
+0\\3
+\end{bmatrix}</annotation></semantics></math></p>
 <p>The results differ:</p>
-<p>$$<br>\begin{bmatrix}<br>2\1<br>\end{bmatrix}<br>\neq<br>\begin{bmatrix}<br>0\3<br>\end{bmatrix}<br>$$</p>
-<p>This is why transformation order must be explicitly defined in robotics software.</p>
-<h3 id="6-3-Chaining-Rotations"><a href="#6-3-Chaining-Rotations" class="headerlink" title="6.3 Chaining Rotations"></a>6.3 Chaining Rotations</h3><p>Suppose a robot has two consecutive revolute joints with angles $\theta_1$ and $\theta_2$. If both rotations are represented in the same planar coordinate convention, their combined rotation is</p>
-<p>$$<br>\mathbf{R}_{\text{total}}<br>&#x3D;\mathbf{R}(\theta_1)\mathbf{R}(\theta_2)<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>≠</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>3</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{bmatrix}
+2\\1
+\end{bmatrix}
+\neq
+\begin{bmatrix}
+0\\3
+\end{bmatrix}</annotation></semantics></math></p>
+<p>This is why transformation order must be explicitly defined in
+robotics software.</p>
+<h3 id="chaining-rotations">6.3 Chaining Rotations</h3>
+<p>Suppose a robot has two consecutive revolute joints with angles
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>θ</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\theta_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>θ</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\theta_2</annotation></semantics></math>.
+If both rotations are represented in the same planar coordinate
+convention, their combined rotation is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝑹</mi><mtext mathvariant="normal">total</mtext></msub><mo>=</mo><mi mathvariant="bold-italic">𝑹</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>θ</mi><mn>1</mn></msub><mo stretchy="false" form="postfix">)</mo><mi mathvariant="bold-italic">𝑹</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>θ</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{R}_{\text{total}}
+=\mathbf{R}(\theta_1)\mathbf{R}(\theta_2)</annotation></semantics></math></p>
 <p>For planar rotations about the same axis, this is equivalent to</p>
-<p>$$<br>\mathbf{R}_{\text{total}}<br>&#x3D;\mathbf{R}(\theta_1+\theta_2)<br>$$</p>
-<p>In three-dimensional robotics, rotations about different axes generally cannot be combined by simply adding their angles.</p>
-<p>This distinction becomes central when modeling articulated robots.</p>
-<hr>
-<h2 id="7-From-Linear-Algebra-to-Robot-Kinematics"><a href="#7-From-Linear-Algebra-to-Robot-Kinematics" class="headerlink" title="7. From Linear Algebra to Robot Kinematics"></a>7. From Linear Algebra to Robot Kinematics</h2><p>We can now apply vectors and rotation matrices to a simple two-link planar robot arm.</p>
-<h3 id="7-1-Defining-the-Robot"><a href="#7-1-Defining-the-Robot" class="headerlink" title="7.1 Defining the Robot"></a>7.1 Defining the Robot</h3><p>Consider a robot arm with two rigid links:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝑹</mi><mtext mathvariant="normal">total</mtext></msub><mo>=</mo><mi mathvariant="bold-italic">𝑹</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>θ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>θ</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{R}_{\text{total}}
+=\mathbf{R}(\theta_1+\theta_2)</annotation></semantics></math></p>
+<p>In three-dimensional robotics, rotations about different axes
+generally cannot be combined by simply adding their angles.</p>
+<p>This distinction becomes central when modeling articulated
+robots.</p>
+<hr />
+<h2 id="from-linear-algebra-to-robot-kinematics">7. From Linear Algebra
+to Robot Kinematics</h2>
+<p>We can now apply vectors and rotation matrices to a simple two-link
+planar robot arm.</p>
+<h3 id="defining-the-robot">7.1 Defining the Robot</h3>
+<p>Consider a robot arm with two rigid links:</p>
 <ul>
-<li>Link 1 has length $L_1$.</li>
-<li>Link 2 has length $L_2$.</li>
-<li>Joint 1 has angle $\theta_1$.</li>
-<li>Joint 2 has angle $\theta_2$, measured relative to link 1.</li>
+<li>Link 1 has length
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>L</mi><mn>1</mn></msub><annotation encoding="application/x-tex">L_1</annotation></semantics></math>.</li>
+<li>Link 2 has length
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>L</mi><mn>2</mn></msub><annotation encoding="application/x-tex">L_2</annotation></semantics></math>.</li>
+<li>Joint 1 has angle
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>θ</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\theta_1</annotation></semantics></math>.</li>
+<li>Joint 2 has angle
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>θ</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\theta_2</annotation></semantics></math>,
+measured relative to link 1.</li>
 </ul>
-<p>The first joint is located at the origin. The second joint is at the end of link 1, and the end-effector is at the end of link 2.</p>
+<p>The first joint is located at the origin. The second joint is at the
+end of link 1, and the end-effector is at the end of link 2.</p>
 <p>The position of the second joint is</p>
-<p>$$<br>\mathbf{p}_1&#x3D;<br>\begin{bmatrix}<br>L_1\cos\theta_1\<br>L_1\sin\theta_1<br>\end{bmatrix}<br>$$</p>
-<p>The orientation of link 2 relative to the world frame is $\theta_1+\theta_2$. Therefore, its displacement is</p>
-<p>$$<br>\mathbf{d}_2&#x3D;<br>\begin{bmatrix}<br>L_2\cos(\theta_1+\theta_2)\<br>L_2\sin(\theta_1+\theta_2)<br>\end{bmatrix}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒑</mi><mn>1</mn></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>L</mi><mn>1</mn></msub><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><msub><mi>θ</mi><mn>1</mn></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>L</mi><mn>1</mn></msub><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><msub><mi>θ</mi><mn>1</mn></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{p}_1=
+\begin{bmatrix}
+L_1\cos\theta_1\\
+L_1\sin\theta_1
+\end{bmatrix}</annotation></semantics></math></p>
+<p>The orientation of link 2 relative to the world frame is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>θ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\theta_1+\theta_2</annotation></semantics></math>.
+Therefore, its displacement is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒅</mi><mn>2</mn></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>L</mi><mn>2</mn></msub><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>θ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>θ</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>L</mi><mn>2</mn></msub><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>θ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>θ</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{d}_2=
+\begin{bmatrix}
+L_2\cos(\theta_1+\theta_2)\\
+L_2\sin(\theta_1+\theta_2)
+\end{bmatrix}</annotation></semantics></math></p>
 <p>The end-effector position is the sum of these two displacements:</p>
-<p>$$<br>\mathbf{p}_{ee}&#x3D;\mathbf{p}_1+\mathbf{d}_2<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">𝒑</mi><mrow><mi>e</mi><mi>e</mi></mrow></msub><mo>=</mo><msub><mi mathvariant="bold-italic">𝒑</mi><mn>1</mn></msub><mo>+</mo><msub><mi mathvariant="bold-italic">𝒅</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\mathbf{p}_{ee}=\mathbf{p}_1+\mathbf{d}_2</annotation></semantics></math></p>
 <p>Consequently,</p>
-<p>$$<br>x&#x3D;L_1\cos\theta_1+<br>L_2\cos(\theta_1+\theta_2)<br>$$</p>
-<p>$$<br>y&#x3D;L_1\sin\theta_1+<br>L_2\sin(\theta_1+\theta_2)<br>$$</p>
-<p>These equations are the forward kinematics of a two-link planar robot arm.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><msub><mi>L</mi><mn>1</mn></msub><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><msub><mi>θ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>L</mi><mn>2</mn></msub><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>θ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>θ</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">x=L_1\cos\theta_1+
+L_2\cos(\theta_1+\theta_2)</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><msub><mi>L</mi><mn>1</mn></msub><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><msub><mi>θ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>L</mi><mn>2</mn></msub><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>θ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>θ</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">y=L_1\sin\theta_1+
+L_2\sin(\theta_1+\theta_2)</annotation></semantics></math></p>
+<p>These equations are the forward kinematics of a two-link planar robot
+arm.</p>
 <p>They are derived directly from vector geometry and rotations.</p>
-<h3 id="7-2-Implementing-Forward-Kinematics"><a href="#7-2-Implementing-Forward-Kinematics" class="headerlink" title="7.2 Implementing Forward Kinematics"></a>7.2 Implementing Forward Kinematics</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">forward_kinematics</span>(<span class="params">theta1, theta2, L1, L2</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Compute the end-effector position of a 2-link planar arm.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Parameters</span></span><br><span class="line"><span class="string">    ----------</span></span><br><span class="line"><span class="string">    theta1, theta2 : float</span></span><br><span class="line"><span class="string">        Joint angles in radians.</span></span><br><span class="line"><span class="string">    L1, L2 : float</span></span><br><span class="line"><span class="string">        Link lengths in meters.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns</span></span><br><span class="line"><span class="string">    -------</span></span><br><span class="line"><span class="string">    numpy.ndarray</span></span><br><span class="line"><span class="string">        End-effector position [x, y] in meters.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    p1 = np.array([</span><br><span class="line">        L1 * np.cos(theta1),</span><br><span class="line">        L1 * np.sin(theta1)</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    p2 = np.array([</span><br><span class="line">        L2 * np.cos(theta1 + theta2),</span><br><span class="line">        L2 * np.sin(theta1 + theta2)</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> p1 + p2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">L1 = <span class="number">0.5</span></span><br><span class="line">L2 = <span class="number">0.3</span></span><br><span class="line"></span><br><span class="line">theta1 = np.deg2rad(<span class="number">30</span>)</span><br><span class="line">theta2 = np.deg2rad(<span class="number">45</span>)</span><br><span class="line"></span><br><span class="line">position = forward_kinematics(</span><br><span class="line">    theta1, theta2, L1, L2</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;End-effector position:&quot;</span>, position)</span><br></pre></td></tr></table></figure>
-
+<h3 id="implementing-forward-kinematics">7.2 Implementing Forward
+Kinematics</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">forward_kinematics</span>(<span class="params">theta1, theta2, L1, L2</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Compute the end-effector position of a 2-link planar arm.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Parameters</span></span><br><span class="line"><span class="string">    ----------</span></span><br><span class="line"><span class="string">    theta1, theta2 : float</span></span><br><span class="line"><span class="string">        Joint angles in radians.</span></span><br><span class="line"><span class="string">    L1, L2 : float</span></span><br><span class="line"><span class="string">        Link lengths in meters.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns</span></span><br><span class="line"><span class="string">    -------</span></span><br><span class="line"><span class="string">    numpy.ndarray</span></span><br><span class="line"><span class="string">        End-effector position [x, y] in meters.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    p1 = np.array([</span><br><span class="line">        L1 * np.cos(theta1),</span><br><span class="line">        L1 * np.sin(theta1)</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    p2 = np.array([</span><br><span class="line">        L2 * np.cos(theta1 + theta2),</span><br><span class="line">        L2 * np.sin(theta1 + theta2)</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> p1 + p2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">L1 = <span class="number">0.5</span></span><br><span class="line">L2 = <span class="number">0.3</span></span><br><span class="line"></span><br><span class="line">theta1 = np.deg2rad(<span class="number">30</span>)</span><br><span class="line">theta2 = np.deg2rad(<span class="number">45</span>)</span><br><span class="line"></span><br><span class="line">position = forward_kinematics(</span><br><span class="line">    theta1, theta2, L1, L2</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;End-effector position:&quot;</span>, position)</span><br></pre></td></tr></table></figure>
 <p>The function returns the end-effector coordinates in meters.</p>
-<p>Notice that the joint angles are measured in radians and that the second angle is relative to the first link. These conventions must remain consistent throughout the model.</p>
-<h3 id="7-3-A-Matrix-Based-Formulation"><a href="#7-3-A-Matrix-Based-Formulation" class="headerlink" title="7.3 A Matrix-Based Formulation"></a>7.3 A Matrix-Based Formulation</h3><p>The same geometry can be expressed using homogeneous transformation matrices, which combine rotation and translation into a single matrix:</p>
-<p>$$<br>\mathbf{T}&#x3D;<br>\begin{bmatrix}<br>\cos\theta&amp;-\sin\theta&amp;x\<br>\sin\theta&amp;\cos\theta&amp;y\<br>0&amp;0&amp;1<br>\end{bmatrix}<br>$$</p>
-<p>A point $(x_p,y_p)$ can be represented in homogeneous coordinates as</p>
-<p>$$<br>\tilde{\mathbf{p}}&#x3D;<br>\begin{bmatrix}<br>x_p\y_p\1<br>\end{bmatrix}<br>$$</p>
+<p>Notice that the joint angles are measured in radians and that the
+second angle is relative to the first link. These conventions must
+remain consistent throughout the model.</p>
+<h3 id="a-matrix-based-formulation">7.3 A Matrix-Based Formulation</h3>
+<p>The same geometry can be expressed using homogeneous transformation
+matrices, which combine rotation and translation into a single
+matrix:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑻</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>x</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mtd><mtd columnalign="center" style="text-align: center"><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>y</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{T}=
+\begin{bmatrix}
+\cos\theta&amp;-\sin\theta&amp;x\\
+\sin\theta&amp;\cos\theta&amp;y\\
+0&amp;0&amp;1
+\end{bmatrix}</annotation></semantics></math></p>
+<p>A point
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mi>p</mi></msub><mo>,</mo><msub><mi>y</mi><mi>p</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(x_p,y_p)</annotation></semantics></math>
+can be represented in homogeneous coordinates as</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi mathvariant="bold-italic">𝒑</mi><mo accent="true">̃</mo></mover><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mi>p</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>y</mi><mi>p</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\tilde{\mathbf{p}}=
+\begin{bmatrix}
+x_p\\y_p\\1
+\end{bmatrix}</annotation></semantics></math></p>
 <p>The transformed point is</p>
-<p>$$<br>\tilde{\mathbf{p}}^{\prime}&#x3D;\mathbf{T}\tilde{\mathbf{p}}<br>$$</p>
-<p>For a two-link arm, we can compose transformations along the kinematic chain:</p>
-<h1 id="mathbf-T-0-2"><a href="#mathbf-T-0-2" class="headerlink" title="$$\mathbf{T}_{0}^{2}"></a>$$<br>\mathbf{T}_{0}^{2}</h1><p>\mathbf{T}<em>{0}^{1}<br>\mathbf{T}</em>{1}^{2}<br>$$</p>
-<p>Here, $\mathbf{T}<em>{0}^{1}$ describes the pose of frame 1 relative to frame 0, while $\mathbf{T}</em>{1}^{2}$ describes frame 2 relative to frame 1.</p>
-<p>This formulation is more scalable than manually writing separate equations for every link. The same principle extends to robots with many joints and to three-dimensional coordinate transformations.</p>
-<p><strong>Important distinction:</strong> A rotation matrix is a linear transformation, but translation is not a linear transformation of ordinary position vectors. Homogeneous coordinates allow rotation and translation to be combined into one matrix operation.</p>
-<p>We will explore homogeneous transformations and robot kinematic chains in greater detail in later articles.</p>
-<hr>
-<h2 id="8-Numerical-Reliability-Common-Mistakes"><a href="#8-Numerical-Reliability-Common-Mistakes" class="headerlink" title="8. Numerical Reliability: Common Mistakes"></a>8. Numerical Reliability: Common Mistakes</h2><p>Correct mathematical formulas are only part of a reliable robotics implementation. Numerical errors and inconsistent conventions can produce incorrect robot poses or unstable calculations.</p>
-<h3 id="Mistake-1-Mixing-Degrees-and-Radians"><a href="#Mistake-1-Mixing-Degrees-and-Radians" class="headerlink" title="Mistake 1: Mixing Degrees and Radians"></a>Mistake 1: Mixing Degrees and Radians</h3><p>NumPy’s trigonometric functions expect radians.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><mi mathvariant="bold-italic">𝒑</mi><mo accent="true">̃</mo></mover><mi>′</mi></msup><mo>=</mo><mi mathvariant="bold-italic">𝑻</mi><mover><mi mathvariant="bold-italic">𝒑</mi><mo accent="true">̃</mo></mover></mrow><annotation encoding="application/x-tex">\tilde{\mathbf{p}}^{\prime}=\mathbf{T}\tilde{\mathbf{p}}</annotation></semantics></math></p>
+<p>For a two-link arm, we can compose transformations along the
+kinematic chain:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi mathvariant="bold-italic">𝑻</mi><mn>0</mn><mn>2</mn></msubsup><mo>=</mo><msubsup><mi mathvariant="bold-italic">𝑻</mi><mn>0</mn><mn>1</mn></msubsup><msubsup><mi mathvariant="bold-italic">𝑻</mi><mn>1</mn><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">\mathbf{T}_{0}^{2}
+=
+\mathbf{T}_{0}^{1}
+\mathbf{T}_{1}^{2}</annotation></semantics></math></p>
+<p>Here,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi mathvariant="bold-italic">𝑻</mi><mn>0</mn><mn>1</mn></msubsup><annotation encoding="application/x-tex">\mathbf{T}_{0}^{1}</annotation></semantics></math>
+describes the pose of frame 1 relative to frame 0, while
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi mathvariant="bold-italic">𝑻</mi><mn>1</mn><mn>2</mn></msubsup><annotation encoding="application/x-tex">\mathbf{T}_{1}^{2}</annotation></semantics></math>
+describes frame 2 relative to frame 1.</p>
+<p>This formulation is more scalable than manually writing separate
+equations for every link. The same principle extends to robots with many
+joints and to three-dimensional coordinate transformations.</p>
+<p><strong>Important distinction:</strong> A rotation matrix is a linear
+transformation, but translation is not a linear transformation of
+ordinary position vectors. Homogeneous coordinates allow rotation and
+translation to be combined into one matrix operation.</p>
+<p>We will explore homogeneous transformations and robot kinematic
+chains in greater detail in later articles.</p>
+<hr />
+<h2 id="numerical-reliability-common-mistakes">8. Numerical Reliability:
+Common Mistakes</h2>
+<p>Correct mathematical formulas are only part of a reliable robotics
+implementation. Numerical errors and inconsistent conventions can
+produce incorrect robot poses or unstable calculations.</p>
+<h3 id="mistake-1-mixing-degrees-and-radians">Mistake 1: Mixing Degrees
+and Radians</h3>
+<p>NumPy’s trigonometric functions expect radians.</p>
 <p>Incorrect:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">theta = <span class="number">90</span></span><br><span class="line">x = np.cos(theta)</span><br></pre></td></tr></table></figure>
-
 <p>Correct:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">theta = np.deg2rad(<span class="number">90</span>)</span><br><span class="line">x = np.cos(theta)</span><br></pre></td></tr></table></figure>
-
-<h3 id="Mistake-2-Using-Inconsistent-Coordinate-Frames"><a href="#Mistake-2-Using-Inconsistent-Coordinate-Frames" class="headerlink" title="Mistake 2: Using Inconsistent Coordinate Frames"></a>Mistake 2: Using Inconsistent Coordinate Frames</h3><p>Two vectors should not be added or compared directly if they are expressed in different coordinate frames.</p>
-<p>For example, a target position measured in the camera frame must be transformed into the robot base frame before it can be used directly as a target in that frame.</p>
+<h3 id="mistake-2-using-inconsistent-coordinate-frames">Mistake 2: Using
+Inconsistent Coordinate Frames</h3>
+<p>Two vectors should not be added or compared directly if they are
+expressed in different coordinate frames.</p>
+<p>For example, a target position measured in the camera frame must be
+transformed into the robot base frame before it can be used directly as
+a target in that frame.</p>
 <p>Always document which frame each quantity belongs to.</p>
-<h3 id="Mistake-3-Ignoring-Matrix-Dimensions"><a href="#Mistake-3-Ignoring-Matrix-Dimensions" class="headerlink" title="Mistake 3: Ignoring Matrix Dimensions"></a>Mistake 3: Ignoring Matrix Dimensions</h3><p>Matrix multiplication requires compatible dimensions. If $\mathbf{A}$ has shape $m\times n$, then $\mathbf{B}$ must have shape $n\times p$ for $\mathbf{A}\mathbf{B}$ to be valid.</p>
-<p>NumPy’s <code>@</code> operator performs matrix multiplication, whereas <code>*</code> performs element-wise multiplication for arrays of compatible shapes.</p>
-<h3 id="Mistake-4-Assuming-All-Matrices-Represent-Rotations"><a href="#Mistake-4-Assuming-All-Matrices-Represent-Rotations" class="headerlink" title="Mistake 4: Assuming All Matrices Represent Rotations"></a>Mistake 4: Assuming All Matrices Represent Rotations</h3><p>A general matrix may scale, shear, reflect, or distort a vector. It is not necessarily a rotation matrix.</p>
+<h3 id="mistake-3-ignoring-matrix-dimensions">Mistake 3: Ignoring Matrix
+Dimensions</h3>
+<p>Matrix multiplication requires compatible dimensions. If
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝑨</mi><annotation encoding="application/x-tex">\mathbf{A}</annotation></semantics></math>
+has shape
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">m\times n</annotation></semantics></math>,
+then
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="bold-italic">𝑩</mi><annotation encoding="application/x-tex">\mathbf{B}</annotation></semantics></math>
+must have shape
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>×</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">n\times p</annotation></semantics></math>
+for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝑨</mi><mi mathvariant="bold-italic">𝑩</mi></mrow><annotation encoding="application/x-tex">\mathbf{A}\mathbf{B}</annotation></semantics></math>
+to be valid.</p>
+<p>NumPy’s <code>@</code> operator performs matrix multiplication,
+whereas <code>*</code> performs element-wise multiplication for arrays
+of compatible shapes.</p>
+<h3 id="mistake-4-assuming-all-matrices-represent-rotations">Mistake 4:
+Assuming All Matrices Represent Rotations</h3>
+<p>A general matrix may scale, shear, reflect, or distort a vector. It
+is not necessarily a rotation matrix.</p>
 <p>For a valid rotation matrix, verify</p>
-<p>$$<br>\mathbf{R}^{T}\mathbf{R}\approx\mathbf{I},<br>\qquad<br>\det(\mathbf{R})\approx1<br>$$</p>
-<p>The approximation symbol is important because floating-point computations introduce small numerical errors.</p>
-<h3 id="Mistake-5-Ignoring-Near-Zero-Denominators"><a href="#Mistake-5-Ignoring-Near-Zero-Denominators" class="headerlink" title="Mistake 5: Ignoring Near-Zero Denominators"></a>Mistake 5: Ignoring Near-Zero Denominators</h3><p>When normalizing a vector or calculating the angle between two vectors, check that the relevant norms are not too close to zero.</p>
-<p>A zero vector has no defined direction, so it cannot be normalized meaningfully.</p>
-<hr>
-<h2 id="9-A-Practical-Validation-Exercise"><a href="#9-A-Practical-Validation-Exercise" class="headerlink" title="9. A Practical Validation Exercise"></a>9. A Practical Validation Exercise</h2><p>A useful habit in robotics software development is to verify mathematical properties rather than relying only on visual inspection.</p>
-<p>The following checks validate a rotation matrix and its effect on a vector.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold-italic">𝑹</mi><mi>T</mi></msup><mi mathvariant="bold-italic">𝑹</mi><mo>≈</mo><mi mathvariant="bold-italic">𝑰</mi><mo>,</mo><mspace width="2.0em"></mspace><mrow><mi mathvariant="normal">det</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi mathvariant="bold-italic">𝑹</mi><mo stretchy="false" form="postfix">)</mo><mo>≈</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\mathbf{R}^{T}\mathbf{R}\approx\mathbf{I},
+\qquad
+\det(\mathbf{R})\approx1</annotation></semantics></math></p>
+<p>The approximation symbol is important because floating-point
+computations introduce small numerical errors.</p>
+<h3 id="mistake-5-ignoring-near-zero-denominators">Mistake 5: Ignoring
+Near-Zero Denominators</h3>
+<p>When normalizing a vector or calculating the angle between two
+vectors, check that the relevant norms are not too close to zero.</p>
+<p>A zero vector has no defined direction, so it cannot be normalized
+meaningfully.</p>
+<hr />
+<h2 id="a-practical-validation-exercise">9. A Practical Validation
+Exercise</h2>
+<p>A useful habit in robotics software development is to verify
+mathematical properties rather than relying only on visual
+inspection.</p>
+<p>The following checks validate a rotation matrix and its effect on a
+vector.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rotation_matrix_2d</span>(<span class="params">theta</span>):</span><br><span class="line">    c = np.cos(theta)</span><br><span class="line">    s = np.sin(theta)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> np.array([</span><br><span class="line">        [c, -s],</span><br><span class="line">        [s,  c]</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">theta = np.deg2rad(<span class="number">37</span>)</span><br><span class="line">R = rotation_matrix_2d(theta)</span><br><span class="line"></span><br><span class="line">v = np.array([<span class="number">0.6</span>, <span class="number">0.8</span>])</span><br><span class="line">v_rotated = R @ v</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. Rotation matrices preserve vector magnitude.</span></span><br><span class="line"><span class="keyword">assert</span> np.isclose(</span><br><span class="line">    np.linalg.norm(v_rotated),</span><br><span class="line">    np.linalg.norm(v)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. R^T R = I.</span></span><br><span class="line"><span class="keyword">assert</span> np.allclose(</span><br><span class="line">    R.T @ R,</span><br><span class="line">    np.eye(<span class="number">2</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. A proper rotation has determinant +1.</span></span><br><span class="line"><span class="keyword">assert</span> np.isclose(</span><br><span class="line">    np.linalg.det(R),</span><br><span class="line">    <span class="number">1.0</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. Rotating by theta and then by -theta</span></span><br><span class="line"><span class="comment">#    should recover the original vector.</span></span><br><span class="line">R_inverse = rotation_matrix_2d(-theta)</span><br><span class="line"></span><br><span class="line"><span class="keyword">assert</span> np.allclose(</span><br><span class="line">    R_inverse @ v_rotated,</span><br><span class="line">    v</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;All rotation tests passed.&quot;</span>)</span><br></pre></td></tr></table></figure>
-
 <p>Expected output:</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">All rotation tests passed.</span><br></pre></td></tr></table></figure>
-
-<p>These checks are simple, but they illustrate an important engineering principle: <strong>mathematical invariants can become automated tests for robotics software.</strong></p>
-<p>As the model becomes more complex, similar tests can validate forward kinematics, inverse kinematics, coordinate transformations, and Jacobian calculations.</p>
-<hr>
-<h2 id="10-Conclusion"><a href="#10-Conclusion" class="headerlink" title="10. Conclusion"></a>10. Conclusion</h2><p>Linear algebra is not merely a prerequisite for robotics. It is part of the computational language used to describe and control robotic systems.</p>
+<p>These checks are simple, but they illustrate an important engineering
+principle: <strong>mathematical invariants can become automated tests
+for robotics software.</strong></p>
+<p>As the model becomes more complex, similar tests can validate forward
+kinematics, inverse kinematics, coordinate transformations, and Jacobian
+calculations.</p>
+<hr />
+<h2 id="conclusion">10. Conclusion</h2>
+<p>Linear algebra is not merely a prerequisite for robotics. It is part
+of the computational language used to describe and control robotic
+systems.</p>
 <p>In this article, we covered:</p>
 <ul>
-<li><strong>Vectors:</strong> Representing positions, displacements, directions, velocities, and forces.</li>
-<li><strong>Dot products:</strong> Measuring alignment, calculating angles, and projecting vectors.</li>
-<li><strong>Cross products:</strong> Computing perpendicular directions and rotational effects such as torque.</li>
-<li><strong>Matrices:</strong> Representing rotations and other linear transformations.</li>
-<li><strong>Matrix multiplication:</strong> Composing transformations while respecting their order.</li>
-<li><strong>Robot kinematics:</strong> Deriving the end-effector position of a two-link planar arm.</li>
-<li><strong>Numerical validation:</strong> Testing mathematical properties in Python.</li>
+<li><strong>Vectors:</strong> Representing positions, displacements,
+directions, velocities, and forces.</li>
+<li><strong>Dot products:</strong> Measuring alignment, calculating
+angles, and projecting vectors.</li>
+<li><strong>Cross products:</strong> Computing perpendicular directions
+and rotational effects such as torque.</li>
+<li><strong>Matrices:</strong> Representing rotations and other linear
+transformations.</li>
+<li><strong>Matrix multiplication:</strong> Composing transformations
+while respecting their order.</li>
+<li><strong>Robot kinematics:</strong> Deriving the end-effector
+position of a two-link planar arm.</li>
+<li><strong>Numerical validation:</strong> Testing mathematical
+properties in Python.</li>
 </ul>
-<p>The next step is to move from individual vectors and transformations to the coordinate frames used by complete robotic systems.</p>
+<p>The next step is to move from individual vectors and transformations
+to the coordinate frames used by complete robotic systems.</p>
 
     </div>
 
@@ -634,17 +1116,38 @@
       <div class="toc-wrapper">
         <h3 class="toc-title">TOC</h3>
         <div class="toc-content">
-          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Why-Do-Robotics-Engineers-Need-Linear-Algebra"><span class="toc-text">1. Why Do Robotics Engineers Need Linear Algebra?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Vectors-Representing-Position-Direction-and-Motion"><span class="toc-text">2. Vectors: Representing Position, Direction, and Motion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-What-Is-a-Vector"><span class="toc-text">2.1 What Is a Vector?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-Vector-Addition-and-Subtraction"><span class="toc-text">2.2 Vector Addition and Subtraction</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Delta-mathbf-p-mathbf-p-2-mathbf-p-1"><span class="toc-text">$$\Delta\mathbf{p}&#x3D;\mathbf{p}_2-\mathbf{p}_1</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-Scalar-Multiplication"><span class="toc-text">2.3 Scalar Multiplication</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#alpha-mathbf-v"><span class="toc-text">$$\alpha\mathbf{v}</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-Vector-Magnitude-and-Normalization"><span class="toc-text">2.4 Vector Magnitude and Normalization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-Implementation"><span class="toc-text">Python Implementation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-The-Dot-Product-Angles-Projections-and-Alignment"><span class="toc-text">3. The Dot Product: Angles, Projections, and Alignment</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-Algebraic-Definition"><span class="toc-text">3.1 Algebraic Definition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-Geometric-Interpretation"><span class="toc-text">3.2 Geometric Interpretation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-Robotics-Application-Measuring-Alignment"><span class="toc-text">3.3 Robotics Application: Measuring Alignment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-Robotics-Application-Projection"><span class="toc-text">3.4 Robotics Application: Projection</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#operatorname-proj-mathbf-b-mathbf-a"><span class="toc-text">$$\operatorname{proj}_{\mathbf{b}}(\mathbf{a})</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-Implementation-1"><span class="toc-text">Python Implementation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-The-Cross-Product-Perpendicular-Directions-and-Rotational-Effects"><span class="toc-text">4. The Cross Product: Perpendicular Directions and Rotational Effects</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-Definition"><span class="toc-text">4.1 Definition</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#mathbf-a-times-mathbf-b"><span class="toc-text">$$\mathbf{a}\times\mathbf{b}</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-Geometric-Interpretation"><span class="toc-text">4.2 Geometric Interpretation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-Robotics-Application-Calculating-Torque"><span class="toc-text">4.3 Robotics Application: Calculating Torque</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#pmb-tau"><span class="toc-text">$$\pmb{\tau}</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-The-Two-Dimensional-Case"><span class="toc-text">4.4 The Two-Dimensional Case</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#begin-bmatrix-a-x-a-y-0-end-bmatrix-times-begin-bmatrix-b-x-b-y-0-end-bmatrix"><span class="toc-text">$$\begin{bmatrix}a_x\a_y\0\end{bmatrix}\times\begin{bmatrix}b_x\b_y\0\end{bmatrix}</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-Implementation-2"><span class="toc-text">Python Implementation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Matrices-Representing-Linear-Transformations"><span class="toc-text">5. Matrices: Representing Linear Transformations</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-What-Is-a-Matrix"><span class="toc-text">5.1 What Is a Matrix?</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#begin-bmatrix-x%E2%80%99-y%E2%80%99-end-bmatrix"><span class="toc-text">$$\begin{bmatrix}x’ \y’\end{bmatrix}</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-Scaling"><span class="toc-text">5.2 Scaling</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#begin-bmatrix-x%E2%80%99-y%E2%80%99-end-bmatrix-1"><span class="toc-text">$$\begin{bmatrix}x’ \y’\end{bmatrix}</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-Rotation-in-Two-Dimensions"><span class="toc-text">5.3 Rotation in Two Dimensions</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#begin-bmatrix-x%E2%80%99-y%E2%80%99-end-bmatrix-2"><span class="toc-text">$$\begin{bmatrix}x’\y’\end{bmatrix}</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-Why-Rotation-Matrices-Matter-in-Robotics"><span class="toc-text">5.4 Why Rotation Matrices Matter in Robotics</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Matrix-Multiplication-and-Transformation-Order"><span class="toc-text">6. Matrix Multiplication and Transformation Order</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-Matrix-Multiplication"><span class="toc-text">6.1 Matrix Multiplication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-A-Simple-Example"><span class="toc-text">6.2 A Simple Example</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#mathbf-p-%E2%80%99-begin-bmatrix-0-1-end-bmatrix-begin-bmatrix-2-0-end-bmatrix"><span class="toc-text">$$\mathbf{p}’&#x3D;\begin{bmatrix}0\1\end{bmatrix}+\begin{bmatrix}2\0\end{bmatrix}</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-Chaining-Rotations"><span class="toc-text">6.3 Chaining Rotations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-From-Linear-Algebra-to-Robot-Kinematics"><span class="toc-text">7. From Linear Algebra to Robot Kinematics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-Defining-the-Robot"><span class="toc-text">7.1 Defining the Robot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-Implementing-Forward-Kinematics"><span class="toc-text">7.2 Implementing Forward Kinematics</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-A-Matrix-Based-Formulation"><span class="toc-text">7.3 A Matrix-Based Formulation</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#mathbf-T-0-2"><span class="toc-text">$$\mathbf{T}_{0}^{2}</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-Numerical-Reliability-Common-Mistakes"><span class="toc-text">8. Numerical Reliability: Common Mistakes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mistake-1-Mixing-Degrees-and-Radians"><span class="toc-text">Mistake 1: Mixing Degrees and Radians</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mistake-2-Using-Inconsistent-Coordinate-Frames"><span class="toc-text">Mistake 2: Using Inconsistent Coordinate Frames</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mistake-3-Ignoring-Matrix-Dimensions"><span class="toc-text">Mistake 3: Ignoring Matrix Dimensions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mistake-4-Assuming-All-Matrices-Represent-Rotations"><span class="toc-text">Mistake 4: Assuming All Matrices Represent Rotations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mistake-5-Ignoring-Near-Zero-Denominators"><span class="toc-text">Mistake 5: Ignoring Near-Zero Denominators</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-A-Practical-Validation-Exercise"><span class="toc-text">9. A Practical Validation Exercise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-Conclusion"><span class="toc-text">10. Conclusion</span></a></li></ol></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#why-do-robotics-engineers-need-linear-algebra"><span class="toc-text">1. Why Do
+Robotics Engineers Need Linear Algebra?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vectors-representing-position-direction-and-motion"><span class="toc-text">2. Vectors:
+Representing Position, Direction, and Motion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#what-is-a-vector"><span class="toc-text">2.1 What Is a Vector?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vector-addition-and-subtraction"><span class="toc-text">2.2 Vector Addition and
+Subtraction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scalar-multiplication"><span class="toc-text">2.3 Scalar Multiplication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vector-magnitude-and-normalization"><span class="toc-text">2.4 Vector Magnitude and
+Normalization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python-implementation"><span class="toc-text">Python Implementation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-dot-product-angles-projections-and-alignment"><span class="toc-text">3. The Dot
+Product: Angles, Projections, and Alignment</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#algebraic-definition"><span class="toc-text">3.1 Algebraic Definition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#geometric-interpretation"><span class="toc-text">3.2 Geometric Interpretation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#robotics-application-measuring-alignment"><span class="toc-text">3.3 Robotics
+Application: Measuring Alignment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#robotics-application-projection"><span class="toc-text">3.4 Robotics Application:
+Projection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python-implementation-1"><span class="toc-text">Python Implementation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-cross-product-perpendicular-directions-and-rotational-effects"><span class="toc-text">4.
+The Cross Product: Perpendicular Directions and Rotational Effects</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#definition"><span class="toc-text">4.1 Definition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#geometric-interpretation-1"><span class="toc-text">4.2 Geometric Interpretation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#robotics-application-calculating-torque"><span class="toc-text">4.3 Robotics
+Application: Calculating Torque</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#the-two-dimensional-case"><span class="toc-text">4.4 The Two-Dimensional Case</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python-implementation-2"><span class="toc-text">Python Implementation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#matrices-representing-linear-transformations"><span class="toc-text">5. Matrices:
+Representing Linear Transformations</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#what-is-a-matrix"><span class="toc-text">5.1 What Is a Matrix?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scaling"><span class="toc-text">5.2 Scaling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rotation-in-two-dimensions"><span class="toc-text">5.3 Rotation in Two Dimensions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#why-rotation-matrices-matter-in-robotics"><span class="toc-text">5.4 Why Rotation
+Matrices Matter in Robotics</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#matrix-multiplication-and-transformation-order"><span class="toc-text">6. Matrix
+Multiplication and Transformation Order</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#matrix-multiplication"><span class="toc-text">6.1 Matrix Multiplication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#a-simple-example"><span class="toc-text">6.2 A Simple Example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#chaining-rotations"><span class="toc-text">6.3 Chaining Rotations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#from-linear-algebra-to-robot-kinematics"><span class="toc-text">7. From Linear Algebra
+to Robot Kinematics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#defining-the-robot"><span class="toc-text">7.1 Defining the Robot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#implementing-forward-kinematics"><span class="toc-text">7.2 Implementing Forward
+Kinematics</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#a-matrix-based-formulation"><span class="toc-text">7.3 A Matrix-Based Formulation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#numerical-reliability-common-mistakes"><span class="toc-text">8. Numerical Reliability:
+Common Mistakes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mistake-1-mixing-degrees-and-radians"><span class="toc-text">Mistake 1: Mixing Degrees
+and Radians</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mistake-2-using-inconsistent-coordinate-frames"><span class="toc-text">Mistake 2: Using
+Inconsistent Coordinate Frames</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mistake-3-ignoring-matrix-dimensions"><span class="toc-text">Mistake 3: Ignoring Matrix
+Dimensions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mistake-4-assuming-all-matrices-represent-rotations"><span class="toc-text">Mistake 4:
+Assuming All Matrices Represent Rotations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mistake-5-ignoring-near-zero-denominators"><span class="toc-text">Mistake 5: Ignoring
+Near-Zero Denominators</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#a-practical-validation-exercise"><span class="toc-text">9. A Practical Validation
+Exercise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#conclusion"><span class="toc-text">10. Conclusion</span></a></li></ol>
         </div>
       </div>
     </aside>
   
 </div>
 
-    </div>
-  </main>
+  </div>
+</main>
 
-  <footer class="site-footer">
+<footer class="site-footer">
   <div class="footer-container">
     <div class="footer-content">
       <!-- 版权信息 -->
@@ -691,10 +1194,10 @@
   </div>
 </footer>
 
-  
-  <!-- 搜索模态框 -->
-  
-    <div id="search-modal" class="search-modal">
+
+<!-- 搜索模态框 -->
+
+  <div id="search-modal" class="search-modal">
   <div class="search-container">
     <!-- 搜索头部 -->
     <div class="search-header">
@@ -741,31 +1244,31 @@
   </div>
 </div>
 
-  
 
-  <!-- 站点配置 -->
-  <script>
-    window.STARTER_CONFIG = {
-      root: '/',
-      searchEnabled: true
-    };
-  </script>
 
-  <!-- 主脚本 -->
-  
+<!-- 站点配置 -->
+<script>
+  window.STARTER_CONFIG = {
+    root: '/',
+    searchEnabled: true
+  };
+</script>
+
+<!-- 主脚本 -->
+
 <script src="/js/main.js"></script>
 
+
+
   
-  
-    
 <script src="/js/search.js"></script>
 
-  
-  
-  
-    
-<script src="/js/doc-sidebar.js"></script>
+
+
 
   
+<script src="/js/doc-sidebar.js"></script>
+
+
 </body>
 </html>

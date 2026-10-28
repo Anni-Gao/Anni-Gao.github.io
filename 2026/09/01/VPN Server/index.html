@@ -55,9 +55,28 @@
   }
 </style>
 
+
+  <!-- MathJax 配置 -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG: { linebreaks: { automatic: true } }
+    });
+  </script>
+  <script type="text/javascript" async
+          src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <!-- MathJax 配置结束 -->
 <meta name="generator" content="Hexo 8.1.2"></head>
 <body>
-  <header class="site-header">
+<header class="site-header">
   <div class="header-container">
     <!-- Logo / 站点标题 -->
     <div class="site-brand">
@@ -182,10 +201,10 @@
   </div>
 </header>
 
-  
-  <main class="main-content">
-    <div class="container">
-      <div class="page-layout post-layout">
+
+<main class="main-content">
+  <div class="container">
+    <div class="page-layout post-layout">
   <article class="post-article">
     <!-- 文章头部 -->
     <header class="post-header">
@@ -213,8 +232,8 @@
         <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
         <path d="M21 3v5h-5"></path>
       </svg>
-      <time datetime="2026-09-01">
-        Updated by 2026-09-01
+      <time datetime="2026-10-28">
+        Updated by 2026-10-28
       </time>
     </span>
   
@@ -255,45 +274,44 @@
 
     <!-- 文章内容 -->
     <div class="post-content markdown-body">
-      <h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>A VPN (Virtual Private Network) encrypts your internet traffic, masks your real IP address, and enables secure access to remote resources. </p>
-<p>Compared with commercial VPN providers, running your own VPN server provides greater privacy, full control, and flexibility.</p>
-<p>This tutorial demonstrates how to deploy a personal VPN server based on the following architecture:</p>
+      <h2 id="introduction">Introduction</h2>
+<p>A VPN (Virtual Private Network) encrypts your internet traffic, masks
+your real IP address, and enables secure access to remote resources.</p>
+<p>Compared with commercial VPN providers, running your own VPN server
+provides greater privacy, full control, and flexibility.</p>
+<p>This tutorial demonstrates how to deploy a personal VPN server based
+on the following architecture:</p>
 <p><strong>VMess + WebSocket + TLS + Cloudflare CDN</strong></p>
-<hr>
-<h2 id="1-Prerequisites"><a href="#1-Prerequisites" class="headerlink" title="1.Prerequisites"></a>1.Prerequisites</h2><p>Before building your own VPN server, make sure you have the following resources ready:</p>
-<h3 id="1-A-Virtual-Private-Server-VPS"><a href="#1-A-Virtual-Private-Server-VPS" class="headerlink" title="1. A Virtual Private Server (VPS)"></a>1. A Virtual Private Server (VPS)</h3><p>You can choose a VPS provider based on your location, budget, and performance requirements:</p>
-<ul>
-<li><strong>Recommended VPS provider</strong>: <a target="_blank" rel="noopener" href="https://www.oracle.com/cloud/">Oracle Cloud</a></li>
-<li><strong>Recommended Configuration</strong>:<ul>
-<li><strong>CPU</strong>: 1 vCPU or above</li>
-<li><strong>Memory</strong>: 1 GB RAM or more</li>
-<li><strong>Operating System</strong>: Ubuntu 22.04 LTS &#x2F; Debian 12 </li>
-<li><strong>Bandwidth</strong>: Select based on your usage requirements</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-Connect-to-Your-VPS-via-SSH"><a href="#2-Connect-to-Your-VPS-via-SSH" class="headerlink" title="2. Connect to Your VPS via SSH"></a>2. Connect to Your VPS via SSH</h3><p>After creating your Oracle Cloud instance, you will receive:</p>
-<ul>
-<li>Public IP address</li>
-<li>SSH private key</li>
-</ul>
-<p>When creating the instance, Oracle Cloud allows you to generate an SSH key pair or upload your own public key. </p>
-<p>The private key must be kept securely because it is required for SSH authentication.</p>
-<p>Move the key to your local machine.<br>Example SSH connection:</p>
+<hr />
+<h2 id="prerequisites">1.Prerequisites</h2>
+<p>Before building your own VPN server, make sure you have the following
+resources ready:</p>
+<h3 id="a-virtual-private-server-vps">1. A Virtual Private Server
+(VPS)</h3>
+<p>You can choose a VPS provider based on your location, budget, and
+performance requirements: - <strong>Recommended VPS provider</strong>:
+<a target="_blank" rel="noopener" href="https://www.oracle.com/cloud/">Oracle Cloud</a> -
+<strong>Recommended Configuration</strong>: - <strong>CPU</strong>: 1
+vCPU or above - <strong>Memory</strong>: 1 GB RAM or more -
+<strong>Operating System</strong>: Ubuntu 22.04 LTS / Debian 12 -
+<strong>Bandwidth</strong>: Select based on your usage requirements</p>
+<h3 id="connect-to-your-vps-via-ssh">2. Connect to Your VPS via SSH</h3>
+<p>After creating your Oracle Cloud instance, you will receive: - Public
+IP address - SSH private key</p>
+<p>When creating the instance, Oracle Cloud allows you to generate an
+SSH key pair or upload your own public key.</p>
+<p>The private key must be kept securely because it is required for SSH
+authentication.</p>
+<p>Move the key to your local machine. Example SSH connection:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i YOUR_PRIVATE_KEY_LOCATION ubuntu@YOUR_SERVER_IP</span><br></pre></td></tr></table></figure>
-
-<p>Replace:</p>
-<ul>
-<li>YOUR_PRIVATE_KEY_LOCATION with your actual key location, for example: <code> ~/Downloads/oracle-vpn.pem</code></li>
-<li>YOUR_SERVER_IP  with your actual VPS public IP address.</li>
-</ul>
-<p>Before connecting, update the key permission: </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 400 ~/Downloads/oracle-vpn.key</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-Domain-Name"><a href="#3-Domain-Name" class="headerlink" title="3. Domain Name"></a>3. Domain Name</h3><p>Purchase a domain and configure DNS records to point it to your VPS IP address.</p>
-<ul>
-<li><strong>Recommended domain registrar</strong>: <a target="_blank" rel="noopener" href="https://www.namecheap.com/">Namecheap</a></li>
-</ul>
+<p>Replace: - YOUR_PRIVATE_KEY_LOCATION with your actual key location,
+for example: <code>~/Downloads/oracle-vpn.pem</code> - YOUR_SERVER_IP
+with your actual VPS public IP address.</p>
+<p>Before connecting, update the key permission: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 400 ~/Downloads/oracle-vpn.key</span><br></pre></td></tr></table></figure></p>
+<h3 id="domain-name">3. Domain Name</h3>
+<p>Purchase a domain and configure DNS records to point it to your VPS
+IP address. - <strong>Recommended domain registrar</strong>: <a
+target="_blank" rel="noopener" href="https://www.namecheap.com/">Namecheap</a></p>
 <p>Example: <code>vpn.example.com</code></p>
 <p>The domain will later be used for:</p>
 <ul>
@@ -301,7 +319,11 @@
 <li>Cloudflare CDN</li>
 <li>Client configuration</li>
 </ul>
-<h2 id="2-Configure-Cloudflare-and-Xray"><a href="#2-Configure-Cloudflare-and-Xray" class="headerlink" title="2. Configure Cloudflare and Xray"></a>2. Configure Cloudflare and Xray</h2><h3 id="1-Configure-Domain-DNS-Records"><a href="#1-Configure-Domain-DNS-Records" class="headerlink" title="1. Configure Domain DNS Records"></a>1. Configure Domain DNS Records</h3><p>Add the following DNS record in Cloudflare:</p>
+<h2 id="configure-cloudflare-and-xray">2. Configure Cloudflare and
+Xray</h2>
+<h3 id="configure-domain-dns-records">1. Configure Domain DNS
+Records</h3>
+<p>Add the following DNS record in Cloudflare:</p>
 <table>
 <thead>
 <tr>
@@ -311,16 +333,21 @@
 <th>Proxy Status</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>A</td>
 <td>vpn</td>
 <td>YOUR_SERVER_IP</td>
 <td>Proxied</td>
 </tr>
-</tbody></table>
-<p><strong>Make sure Cloudflare CDN proxy is enabled</strong>, otherwise traffic will not pass through Cloudflare.</p>
-<hr>
-<h3 id="2-Configure-Server-Firewall-Rules"><a href="#2-Configure-Server-Firewall-Rules" class="headerlink" title="2. Configure Server Firewall Rules"></a>2. Configure Server Firewall Rules</h3><p>Add the following inbound rules in your server security settings:</p>
+</tbody>
+</table>
+<p><strong>Make sure Cloudflare CDN proxy is enabled</strong>, otherwise
+traffic will not pass through Cloudflare.</p>
+<hr />
+<h3 id="configure-server-firewall-rules">2. Configure Server Firewall
+Rules</h3>
+<p>Add the following inbound rules in your server security settings:</p>
 <table>
 <thead>
 <tr>
@@ -330,74 +357,79 @@
 <th>Purpose</th>
 </tr>
 </thead>
-<tbody><tr>
-<td>0.0.0.0&#x2F;0</td>
+<tbody>
+<tr>
+<td>0.0.0.0/0</td>
 <td>TCP</td>
 <td>8443</td>
 <td>Xray WebSocket + TLS</td>
 </tr>
 <tr>
-<td>0.0.0.0&#x2F;0</td>
+<td>0.0.0.0/0</td>
 <td>TCP</td>
 <td>22 (SSH)</td>
 <td>SSH access</td>
 </tr>
-</tbody></table>
-<hr>
-<h3 id="3-Generate-Cloudflare-Origin-Certificate"><a href="#3-Generate-Cloudflare-Origin-Certificate" class="headerlink" title="3. Generate Cloudflare Origin Certificate"></a>3. Generate Cloudflare Origin Certificate</h3><p>In the Cloudflare dashboard:</p>
-<ol>
-<li>Go to <strong>SSL&#x2F;TLS → Origin Server</strong></li>
+</tbody>
+</table>
+<hr />
+<h3 id="generate-cloudflare-origin-certificate">3. Generate Cloudflare
+Origin Certificate</h3>
+<p>In the Cloudflare dashboard:</p>
+<ol type="1">
+<li>Go to <strong>SSL/TLS → Origin Server</strong></li>
 <li>Click <strong>Create Certificate</strong></li>
 <li>Select <strong>“Cloudflare Origin CA”</strong></li>
-<li>Download the certificate (<code>.pem</code>) and private key (<code>.key</code>)</li>
+<li>Download the certificate (<code>.pem</code>) and private key
+(<code>.key</code>)</li>
 </ol>
-<p>Save the certificate files on your server:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /usr/local/etc/xray/cert</span><br></pre></td></tr></table></figure>
-<p>Upload the certificate files to your server:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/etc/xray/cert/YOUR_DOMAIN.pem</span><br><span class="line">/usr/local/etc/xray/cert/YOUR_DOMAIN.key</span><br></pre></td></tr></table></figure>
-<p>Set the correct permissions:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 644 /usr/local/etc/xray/cert/*.pem</span><br><span class="line"></span><br><span class="line"><span class="built_in">chmod</span> 600 /usr/local/etc/xray/cert/*.key</span><br><span class="line"></span><br><span class="line"><span class="built_in">chown</span> nobody:nogroup /usr/local/etc/xray/cert/*</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="3-Install-and-Configure-Xray"><a href="#3-Install-and-Configure-Xray" class="headerlink" title="3. Install and Configure Xray"></a>3. Install and Configure Xray</h2><h3 id="1-Install-Xray"><a href="#1-Install-Xray" class="headerlink" title="1. Install Xray"></a>1. Install Xray</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash &lt;(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)</span><br></pre></td></tr></table></figure>
-<h3 id="2-Configure-Xray"><a href="#2-Configure-Xray" class="headerlink" title="2. Configure Xray"></a>2. Configure Xray</h3><p>Configuration file: <code>/usr/local/etc/xray/config.json</code></p>
-<p>Generate UUID:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uuidgen</span><br></pre></td></tr></table></figure>
-
-<p>Example:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;inbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">8443</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vmess&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;clients&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;YOUR_UUID&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;alterId&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;streamSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;network&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ws&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;security&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tls&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;tlsSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;serverName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;YOUR_DOMAIN&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;certificates&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;certificateFile&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/usr/local/etc/xray/cert/YOUR_DOMAIN.pem&quot;</span><span class="punctuation">,</span></span><br><span class="line">              <span class="attr">&quot;keyFile&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/usr/local/etc/xray/cert/YOUR_DOMAIN.key&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;wsSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/ray&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;outbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;freedom&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="4-Start-Xray-Service"><a href="#4-Start-Xray-Service" class="headerlink" title="4. Start Xray Service"></a>4. Start Xray Service</h2><p>Restart service:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart xray</span><br></pre></td></tr></table></figure>
-
-<p>Check status::</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status xray</span><br></pre></td></tr></table></figure>
-
-<p>Enable startup:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> xray</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="5-Cloudflare-SSL-TLS-Configuration"><a href="#5-Cloudflare-SSL-TLS-Configuration" class="headerlink" title="5. Cloudflare SSL&#x2F;TLS Configuration"></a>5. Cloudflare SSL&#x2F;TLS Configuration</h2><p>In the Cloudflare dashboard:</p>
-<ol>
-<li>Go to <strong>SSL&#x2F;TLS → Overview</strong></li>
+<p>Save the certificate files on your server: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /usr/local/etc/xray/cert</span><br></pre></td></tr></table></figure> Upload the
+certificate files to your server: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/etc/xray/cert/YOUR_DOMAIN.pem</span><br><span class="line">/usr/local/etc/xray/cert/YOUR_DOMAIN.key</span><br></pre></td></tr></table></figure> Set the correct
+permissions: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 644 /usr/local/etc/xray/cert/*.pem</span><br><span class="line"></span><br><span class="line"><span class="built_in">chmod</span> 600 /usr/local/etc/xray/cert/*.key</span><br><span class="line"></span><br><span class="line"><span class="built_in">chown</span> nobody:nogroup /usr/local/etc/xray/cert/*</span><br></pre></td></tr></table></figure> ***</p>
+<h2 id="install-and-configure-xray">3. Install and Configure Xray</h2>
+<h3 id="install-xray">1. Install Xray</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash &lt;(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)</span><br></pre></td></tr></table></figure>
+<h3 id="configure-xray">2. Configure Xray</h3>
+<p>Configuration file: <code>/usr/local/etc/xray/config.json</code></p>
+<p>Generate UUID: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uuidgen</span><br></pre></td></tr></table></figure></p>
+<p>Example: <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;inbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">8443</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vmess&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;clients&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;YOUR_UUID&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;alterId&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;streamSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;network&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ws&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;security&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tls&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;tlsSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;serverName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;YOUR_DOMAIN&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;certificates&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;certificateFile&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/usr/local/etc/xray/cert/YOUR_DOMAIN.pem&quot;</span><span class="punctuation">,</span></span><br><span class="line">              <span class="attr">&quot;keyFile&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/usr/local/etc/xray/cert/YOUR_DOMAIN.key&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;wsSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/ray&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;outbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;freedom&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="start-xray-service">4. Start Xray Service</h2>
+<p>Restart service: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart xray</span><br></pre></td></tr></table></figure></p>
+<p>Check status:: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status xray</span><br></pre></td></tr></table></figure></p>
+<p>Enable startup: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> xray</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="cloudflare-ssltls-configuration">5. Cloudflare SSL/TLS
+Configuration</h2>
+<p>In the Cloudflare dashboard:</p>
+<ol type="1">
+<li>Go to <strong>SSL/TLS → Overview</strong></li>
 <li>Click <strong>Configure</strong> button</li>
 <li>Select <strong>Full (Strict)</strong></li>
 </ol>
-<hr>
-<h1 id="6-Client-Configuration"><a href="#6-Client-Configuration" class="headerlink" title="6. Client Configuration"></a>6. Client Configuration</h1><h2 id="Shadowrocket"><a href="#Shadowrocket" class="headerlink" title="Shadowrocket"></a>Shadowrocket</h2><p>Use the following VMess URI to import the configuration into Shadowrocket:</p>
+<hr />
+<h1 id="client-configuration">6. Client Configuration</h1>
+<h2 id="shadowrocket">Shadowrocket</h2>
+<p>Use the following VMess URI to import the configuration into
+Shadowrocket:</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vmess://YOUR_UUID@YOUR_DOMAIN:8443?encryption=auto&amp;security=tls&amp;type=ws&amp;host=YOUR_DOMAIN&amp;path=%2Fray#Xray-VMess-WS-TLS</span><br></pre></td></tr></table></figure>
-
-<p>Replace the following placeholders with your actual configuration:</p>
+<p>Replace the following placeholders with your actual
+configuration:</p>
 <ul>
-<li><code>YOUR_UUID</code> — The UUID generated for your Xray client</li>
+<li><code>YOUR_UUID</code> — The UUID generated for your Xray
+client</li>
 <li><code>YOUR_DOMAIN</code> — Your domain name</li>
 </ul>
-<h3 id="Configuration-Parameters"><a href="#Configuration-Parameters" class="headerlink" title="Configuration Parameters"></a>Configuration Parameters</h3><table>
+<h3 id="configuration-parameters">Configuration Parameters</h3>
+<table>
 <thead>
 <tr>
 <th>Parameter</th>
 <th>Value</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>Type</td>
 <td>VMess</td>
 </tr>
@@ -433,14 +465,19 @@
 <td>SNI</td>
 <td><code>YOUR_DOMAIN</code></td>
 </tr>
-</tbody></table>
-<hr>
-<h2 id="ClashX"><a href="#ClashX" class="headerlink" title="ClashX"></a>ClashX</h2><p>Add the following proxy configuration to your ClashX configuration file:</p>
+</tbody>
+</table>
+<hr />
+<h2 id="clashx">ClashX</h2>
+<p>Add the following proxy configuration to your ClashX configuration
+file:</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">proxies:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">&quot;Xray-VMess-WS-TLS&quot;</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">vmess</span></span><br><span class="line">    <span class="attr">server:</span> <span class="string">YOUR_DOMAIN</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">8443</span></span><br><span class="line">    <span class="attr">uuid:</span> <span class="string">YOUR_UUID</span></span><br><span class="line">    <span class="attr">alterId:</span> <span class="number">0</span></span><br><span class="line">    <span class="attr">cipher:</span> <span class="string">auto</span></span><br><span class="line">    <span class="attr">tls:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">servername:</span> <span class="string">YOUR_DOMAIN</span></span><br><span class="line">    <span class="attr">network:</span> <span class="string">ws</span></span><br><span class="line">    <span class="attr">ws-opts:</span></span><br><span class="line">      <span class="attr">path:</span> <span class="string">/ray</span></span><br><span class="line">      <span class="attr">headers:</span></span><br><span class="line">        <span class="attr">Host:</span> <span class="string">YOUR_DOMAIN</span></span><br></pre></td></tr></table></figure>
-
-<p>Replace <code>YOUR_DOMAIN</code> and <code>YOUR_UUID</code> with your actual values.</p>
-<hr>
-<h1 id="7-Common-Maintenance-Commands"><a href="#7-Common-Maintenance-Commands" class="headerlink" title="7. Common Maintenance Commands"></a>7. Common Maintenance Commands</h1><p>The following commands can be used to manage and troubleshoot the Xray service.</p>
+<p>Replace <code>YOUR_DOMAIN</code> and <code>YOUR_UUID</code> with your
+actual values.</p>
+<hr />
+<h1 id="common-maintenance-commands">7. Common Maintenance Commands</h1>
+<p>The following commands can be used to manage and troubleshoot the
+Xray service.</p>
 <table>
 <thead>
 <tr>
@@ -448,7 +485,8 @@
 <th>Command</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>Check Xray status</td>
 <td><code>systemctl status xray</code></td>
 </tr>
@@ -466,21 +504,31 @@
 </tr>
 <tr>
 <td>Check listening ports</td>
-<td><code>ss -tulpn | grep 8443</code></td>
+<td><code>ss -tulpn \| grep 8443</code></td>
 </tr>
-</tbody></table>
-<h3 id="Update-the-Domain"><a href="#Update-the-Domain" class="headerlink" title="Update the Domain"></a>Update the Domain</h3><p>If you need to change the domain configured in Xray, you can update the configuration file with:</p>
+</tbody>
+</table>
+<h3 id="update-the-domain">Update the Domain</h3>
+<p>If you need to change the domain configured in Xray, you can update
+the configuration file with:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i <span class="string">&#x27;s/OLD_DOMAIN/NEW_DOMAIN/g&#x27;</span> /usr/local/etc/xray/config.json</span><br></pre></td></tr></table></figure>
-
 <p>Replace:</p>
 <ul>
 <li><code>OLD_DOMAIN</code> — Your current domain</li>
 <li><code>NEW_DOMAIN</code> — Your new domain</li>
 </ul>
-<p>If the domain changes, you also need to generate a new certificate and update the certificate paths accordingly.</p>
-<hr>
-<h1 id="8-Troubleshooting"><a href="#8-Troubleshooting" class="headerlink" title="8. Troubleshooting"></a>8. Troubleshooting</h1><p>The following table covers some common issues you may encounter during deployment.</p>
+<p>If the domain changes, you also need to generate a new certificate
+and update the certificate paths accordingly.</p>
+<hr />
+<h1 id="troubleshooting">8. Troubleshooting</h1>
+<p>The following table covers some common issues you may encounter
+during deployment.</p>
 <table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 22%" />
+<col style="width: 64%" />
+</colgroup>
 <thead>
 <tr>
 <th>Problem</th>
@@ -488,20 +536,25 @@
 <th>Solution</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>Permission denied</code></td>
 <td>Incorrect certificate file permissions</td>
-<td>Check the certificate ownership and permissions. Use <code>chown nobody:nogroup</code> and appropriate <code>chmod</code> settings.</td>
+<td>Check the certificate ownership and permissions. Use
+<code>chown nobody:nogroup</code> and appropriate <code>chmod</code>
+settings.</td>
 </tr>
 <tr>
 <td><code>Connection refused</code></td>
 <td>Port <code>8443</code> is blocked</td>
-<td>Check your Oracle Cloud security rules and make sure TCP port <code>8443</code> is allowed.</td>
+<td>Check your Oracle Cloud security rules and make sure TCP port
+<code>8443</code> is allowed.</td>
 </tr>
 <tr>
 <td>Client cannot connect</td>
-<td>Incorrect Cloudflare SSL&#x2F;TLS mode</td>
-<td>Set the Cloudflare encryption mode to <strong>Full (strict)</strong>.</td>
+<td>Incorrect Cloudflare SSL/TLS mode</td>
+<td>Set the Cloudflare encryption mode to <strong>Full
+(strict)</strong>.</td>
 </tr>
 <tr>
 <td>Invalid certificate</td>
@@ -511,7 +564,8 @@
 <tr>
 <td>Import failed</td>
 <td>Incorrect UUID or domain</td>
-<td>Verify the UUID, domain, port, and other configuration parameters.</td>
+<td>Verify the UUID, domain, port, and other configuration
+parameters.</td>
 </tr>
 <tr>
 <td>Xray fails to start</td>
@@ -521,30 +575,31 @@
 <tr>
 <td>Port is not listening</td>
 <td>Xray service is not running</td>
-<td>Run <code>systemctl status xray</code> and restart the service if necessary.</td>
+<td>Run <code>systemctl status xray</code> and restart the service if
+necessary.</td>
 </tr>
-</tbody></table>
-<h3 id="Check-Xray-Logs"><a href="#Check-Xray-Logs" class="headerlink" title="Check Xray Logs"></a>Check Xray Logs</h3><p>If the client cannot connect, check the Xray service logs first:</p>
+</tbody>
+</table>
+<h3 id="check-xray-logs">Check Xray Logs</h3>
+<p>If the client cannot connect, check the Xray service logs first:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">journalctl -u xray -f</span><br></pre></td></tr></table></figure>
-
-<p>You can also verify whether Xray is listening on port <code>8443</code>:</p>
+<p>You can also verify whether Xray is listening on port
+<code>8443</code>:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ss -tulpn | grep 8443</span><br></pre></td></tr></table></figure>
-
 <p>If the command returns something similar to:</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LISTEN 0 4096 0.0.0.0:8443 0.0.0.0:*</span><br></pre></td></tr></table></figure>
-
 <p>the Xray service is listening on port <code>8443</code>.</p>
-<h3 id="Check-Firewall-Rules"><a href="#Check-Firewall-Rules" class="headerlink" title="Check Firewall Rules"></a>Check Firewall Rules</h3><p>If the service is running but the client cannot connect, verify that TCP port <code>8443</code> is allowed by both:</p>
-<ol>
+<h3 id="check-firewall-rules">Check Firewall Rules</h3>
+<p>If the service is running but the client cannot connect, verify that
+TCP port <code>8443</code> is allowed by both:</p>
+<ol type="1">
 <li>Oracle Cloud security rules</li>
 <li>The server’s local firewall, such as UFW</li>
 </ol>
 <p>For UFW:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw status</span><br></pre></td></tr></table></figure>
-
 <p>If port <code>8443</code> is not allowed:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw allow 8443/tcp</span><br></pre></td></tr></table></figure>
-
 <p>Then verify:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ufw status</span><br></pre></td></tr></table></figure>
 
@@ -598,17 +653,23 @@
       <div class="toc-wrapper">
         <h3 class="toc-title">TOC</h3>
         <div class="toc-content">
-          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Prerequisites"><span class="toc-text">1.Prerequisites</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-A-Virtual-Private-Server-VPS"><span class="toc-text">1. A Virtual Private Server (VPS)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Connect-to-Your-VPS-via-SSH"><span class="toc-text">2. Connect to Your VPS via SSH</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Domain-Name"><span class="toc-text">3. Domain Name</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Configure-Cloudflare-and-Xray"><span class="toc-text">2. Configure Cloudflare and Xray</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Configure-Domain-DNS-Records"><span class="toc-text">1. Configure Domain DNS Records</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Configure-Server-Firewall-Rules"><span class="toc-text">2. Configure Server Firewall Rules</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Generate-Cloudflare-Origin-Certificate"><span class="toc-text">3. Generate Cloudflare Origin Certificate</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Install-and-Configure-Xray"><span class="toc-text">3. Install and Configure Xray</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Install-Xray"><span class="toc-text">1. Install Xray</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Configure-Xray"><span class="toc-text">2. Configure Xray</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Start-Xray-Service"><span class="toc-text">4. Start Xray Service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Cloudflare-SSL-TLS-Configuration"><span class="toc-text">5. Cloudflare SSL&#x2F;TLS Configuration</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Client-Configuration"><span class="toc-text">6. Client Configuration</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Shadowrocket"><span class="toc-text">Shadowrocket</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuration-Parameters"><span class="toc-text">Configuration Parameters</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ClashX"><span class="toc-text">ClashX</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-Common-Maintenance-Commands"><span class="toc-text">7. Common Maintenance Commands</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Update-the-Domain"><span class="toc-text">Update the Domain</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-Troubleshooting"><span class="toc-text">8. Troubleshooting</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Check-Xray-Logs"><span class="toc-text">Check Xray Logs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Check-Firewall-Rules"><span class="toc-text">Check Firewall Rules</span></a></li></ol></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#prerequisites"><span class="toc-text">1.Prerequisites</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#a-virtual-private-server-vps"><span class="toc-text">1. A Virtual Private Server
+(VPS)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#connect-to-your-vps-via-ssh"><span class="toc-text">2. Connect to Your VPS via SSH</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#domain-name"><span class="toc-text">3. Domain Name</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#configure-cloudflare-and-xray"><span class="toc-text">2. Configure Cloudflare and
+Xray</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#configure-domain-dns-records"><span class="toc-text">1. Configure Domain DNS
+Records</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#configure-server-firewall-rules"><span class="toc-text">2. Configure Server Firewall
+Rules</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#generate-cloudflare-origin-certificate"><span class="toc-text">3. Generate Cloudflare
+Origin Certificate</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#install-and-configure-xray"><span class="toc-text">3. Install and Configure Xray</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#install-xray"><span class="toc-text">1. Install Xray</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#configure-xray"><span class="toc-text">2. Configure Xray</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#start-xray-service"><span class="toc-text">4. Start Xray Service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cloudflare-ssltls-configuration"><span class="toc-text">5. Cloudflare SSL&#x2F;TLS
+Configuration</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#client-configuration"><span class="toc-text">6. Client Configuration</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#shadowrocket"><span class="toc-text">Shadowrocket</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#configuration-parameters"><span class="toc-text">Configuration Parameters</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#clashx"><span class="toc-text">ClashX</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#common-maintenance-commands"><span class="toc-text">7. Common Maintenance Commands</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#update-the-domain"><span class="toc-text">Update the Domain</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#troubleshooting"><span class="toc-text">8. Troubleshooting</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#check-xray-logs"><span class="toc-text">Check Xray Logs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#check-firewall-rules"><span class="toc-text">Check Firewall Rules</span></a></li></ol></li></ol>
         </div>
       </div>
     </aside>
   
 </div>
 
-    </div>
-  </main>
+  </div>
+</main>
 
-  <footer class="site-footer">
+<footer class="site-footer">
   <div class="footer-container">
     <div class="footer-content">
       <!-- 版权信息 -->
@@ -655,10 +716,10 @@
   </div>
 </footer>
 
-  
-  <!-- 搜索模态框 -->
-  
-    <div id="search-modal" class="search-modal">
+
+<!-- 搜索模态框 -->
+
+  <div id="search-modal" class="search-modal">
   <div class="search-container">
     <!-- 搜索头部 -->
     <div class="search-header">
@@ -705,31 +766,31 @@
   </div>
 </div>
 
-  
 
-  <!-- 站点配置 -->
-  <script>
-    window.STARTER_CONFIG = {
-      root: '/',
-      searchEnabled: true
-    };
-  </script>
 
-  <!-- 主脚本 -->
-  
+<!-- 站点配置 -->
+<script>
+  window.STARTER_CONFIG = {
+    root: '/',
+    searchEnabled: true
+  };
+</script>
+
+<!-- 主脚本 -->
+
 <script src="/js/main.js"></script>
 
+
+
   
-  
-    
 <script src="/js/search.js"></script>
 
-  
-  
-  
-    
-<script src="/js/doc-sidebar.js"></script>
+
+
 
   
+<script src="/js/doc-sidebar.js"></script>
+
+
 </body>
 </html>
