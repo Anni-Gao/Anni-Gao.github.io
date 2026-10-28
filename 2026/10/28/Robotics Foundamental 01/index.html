@@ -247,7 +247,7 @@
         <path d="M15.1 18H3"></path>
       </svg>
       
-      26.6k Words
+      27.4k Words
     </span>
   
 
@@ -259,7 +259,7 @@
         <polyline points="12 6 12 12 16 14"></polyline>
       </svg>
       
-      About 89 mintues reading
+      About 92 mintues reading
     </span>
   
 
@@ -423,6 +423,14 @@ a_y+b_y
 represent the position of a point reached by applying one displacement
 after another, provided both vectors are expressed in the same
 coordinate frame.</p>
+<figure>
+<img src="../images/vector_add_sub.png"
+alt="Figure 1: Vector addition and subtraction." />
+<figcaption aria-hidden="true">Figure 1: Vector addition and
+subtraction.</figcaption>
+</figure>
+<p><em>Figure 1: Vector addition follows the parallelogram rule;
+subtraction points from the tip of b to the tip of a.</em></p>
 <p>Similarly,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">𝒂</mi><mo>−</mo><mi mathvariant="bold-italic">𝒃</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>x</mi></msub><mo>−</mo><msub><mi>b</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>a</mi><mi>y</mi></msub><mo>−</mo><msub><mi>b</mi><mi>y</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{a}-\mathbf{b}=
 \begin{bmatrix}
@@ -580,6 +588,14 @@ is</p>
 =
 \frac{\mathbf{a}\cdot\mathbf{b}}
 {\mathbf{b}\cdot\mathbf{b}}\mathbf{b}</annotation></semantics></math></p>
+<figure>
+<img src="../images/dot_projection.png"
+alt="Figure 2: Dot product, angle between vectors, and vector projection." />
+<figcaption aria-hidden="true">Figure 2: Dot product, angle between
+vectors, and vector projection.</figcaption>
+</figure>
+<p><em>Figure 2: Dot product, angle between vectors, and vector
+projection.</em></p>
 <p>Projection is useful when decomposing a force or velocity into
 components parallel and perpendicular to a surface, path, or direction
 of motion.</p>
@@ -777,6 +793,14 @@ x\sin\theta+y\cos\theta
 \begin{bmatrix}
 0\\1
 \end{bmatrix}</annotation></semantics></math></p>
+<figure>
+<img src="../images/rotation_2d.png"
+alt="Figure 3: Rotating a vector by θ using the 2D rotation matrix." />
+<figcaption aria-hidden="true">Figure 3: Rotating a vector by θ using
+the 2D rotation matrix.</figcaption>
+</figure>
+<p><em>Figure 3: Rotating a vector by θ using the 2D rotation
+matrix.</em></p>
 <p>The vector originally pointing along the positive x-axis now points
 along the positive y-axis.</p>
 <p>In NumPy, trigonometric functions use radians rather than
@@ -868,6 +892,14 @@ rotating it.</p>
 \begin{bmatrix}
 0\\3
 \end{bmatrix}</annotation></semantics></math></p>
+<figure>
+<img src="../images/transform_order.png"
+alt="Figure 4: Transformation order matters: rotate-then-translate vs. translate-then-rotate." />
+<figcaption aria-hidden="true">Figure 4: Transformation order matters:
+rotate-then-translate vs. translate-then-rotate.</figcaption>
+</figure>
+<p><em>Figure 4: Transformation order matters: rotate-then-translate
+vs. translate-then-rotate.</em></p>
 <p>This is why transformation order must be explicitly defined in
 robotics software.</p>
 <h3 id="chaining-rotations">6.3 Chaining Rotations</h3>
@@ -927,12 +959,20 @@ L_2\sin(\theta_1+\theta_2)
 L_2\cos(\theta_1+\theta_2)</annotation></semantics></math></p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><msub><mi>L</mi><mn>1</mn></msub><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><msub><mi>θ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>L</mi><mn>2</mn></msub><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>θ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>θ</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">y=L_1\sin\theta_1+
 L_2\sin(\theta_1+\theta_2)</annotation></semantics></math></p>
+<figure>
+<img src="../images/two_link_arm.png"
+alt="Figure 5: Two-link planar arm and its forward kinematics." />
+<figcaption aria-hidden="true">Figure 5: Two-link planar arm and its
+forward kinematics.</figcaption>
+</figure>
+<p><em>Figure 5: Two-link planar arm and its forward
+kinematics.</em></p>
 <p>These equations are the forward kinematics of a two-link planar robot
 arm.</p>
 <p>They are derived directly from vector geometry and rotations.</p>
 <h3 id="implementing-forward-kinematics">7.2 Implementing Forward
 Kinematics</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">forward_kinematics</span>(<span class="params">theta1, theta2, L1, L2</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Compute the end-effector position of a 2-link planar arm.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Parameters</span></span><br><span class="line"><span class="string">    ----------</span></span><br><span class="line"><span class="string">    theta1, theta2 : float</span></span><br><span class="line"><span class="string">        Joint angles in radians.</span></span><br><span class="line"><span class="string">    L1, L2 : float</span></span><br><span class="line"><span class="string">        Link lengths in meters.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns</span></span><br><span class="line"><span class="string">    -------</span></span><br><span class="line"><span class="string">    numpy.ndarray</span></span><br><span class="line"><span class="string">        End-effector position [x, y] in meters.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    p1 = np.array([</span><br><span class="line">        L1 * np.cos(theta1),</span><br><span class="line">        L1 * np.sin(theta1)</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    p2 = np.array([</span><br><span class="line">        L2 * np.cos(theta1 + theta2),</span><br><span class="line">        L2 * np.sin(theta1 + theta2)</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> p1 + p2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">L1 = <span class="number">0.5</span></span><br><span class="line">L2 = <span class="number">0.3</span></span><br><span class="line"></span><br><span class="line">theta1 = np.deg2rad(<span class="number">30</span>)</span><br><span class="line">theta2 = np.deg2rad(<span class="number">45</span>)</span><br><span class="line"></span><br><span class="line">position = forward_kinematics(</span><br><span class="line">    theta1, theta2, L1, L2</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;End-effector position:&quot;</span>, position)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">forward_kinematics</span>(<span class="params">theta1, theta2, L1, L2</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Compute the end-effector position of a 2-link planar arm.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Parameters</span></span><br><span class="line"><span class="string">    ----------</span></span><br><span class="line"><span class="string">    theta1, theta2 : float</span></span><br><span class="line"><span class="string">        Joint angles in radians.</span></span><br><span class="line"><span class="string">    L1, L2 : float</span></span><br><span class="line"><span class="string">        Link lengths in meters.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns</span></span><br><span class="line"><span class="string">    -------</span></span><br><span class="line"><span class="string">    numpy.ndarray</span></span><br><span class="line"><span class="string">        End-effector position [x, y] in meters.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    p1 = np.array([</span><br><span class="line">        L1 * np.cos(theta1),</span><br><span class="line">        L1 * np.sin(theta1)</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    p2 = np.array([</span><br><span class="line">        L2 * np.cos(theta1 + theta2),</span><br><span class="line">        L2 * np.sin(theta1 + theta2)</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> p1 + p2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">L1 = <span class="number">0.5</span></span><br><span class="line">L2 = <span class="number">0.3</span></span><br><span class="line"></span><br><span class="line">theta1 = np.deg2rad(<span class="number">30</span>)</span><br><span class="line">theta2 = np.deg2rad(<span class="number">45</span>)</span><br><span class="line"></span><br><span class="line">position = forward_kinematics(</span><br><span class="line">    theta1, theta2, L1, L2</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;End-effector position:&quot;</span>, position)</span><br></pre></td></tr></table></figure>
 <p>The function returns the end-effector coordinates in meters.</p>
 <p>Notice that the joint angles are measured in radians and that the
 second angle is relative to the first link. These conventions must
@@ -962,6 +1002,14 @@ kinematic chain:</p>
 =
 \mathbf{T}_{0}^{1}
 \mathbf{T}_{1}^{2}</annotation></semantics></math></p>
+<figure>
+<img src="../images/homogeneous_transform.png"
+alt="Figure 6: Homogeneous transform mapping frame 1 coordinates into frame 0." />
+<figcaption aria-hidden="true">Figure 6: Homogeneous transform mapping
+frame 1 coordinates into frame 0.</figcaption>
+</figure>
+<p><em>Figure 6: Homogeneous transform mapping frame 1 coordinates into
+frame 0.</em></p>
 <p>Here,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi mathvariant="bold-italic">𝑻</mi><mn>0</mn><mn>1</mn></msubsup><annotation encoding="application/x-tex">\mathbf{T}_{0}^{1}</annotation></semantics></math>
 describes the pose of frame 1 relative to frame 0, while
@@ -1037,7 +1085,7 @@ mathematical properties rather than relying only on visual
 inspection.</p>
 <p>The following checks validate a rotation matrix and its effect on a
 vector.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rotation_matrix_2d</span>(<span class="params">theta</span>):</span><br><span class="line">    c = np.cos(theta)</span><br><span class="line">    s = np.sin(theta)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> np.array([</span><br><span class="line">        [c, -s],</span><br><span class="line">        [s,  c]</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">theta = np.deg2rad(<span class="number">37</span>)</span><br><span class="line">R = rotation_matrix_2d(theta)</span><br><span class="line"></span><br><span class="line">v = np.array([<span class="number">0.6</span>, <span class="number">0.8</span>])</span><br><span class="line">v_rotated = R @ v</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. Rotation matrices preserve vector magnitude.</span></span><br><span class="line"><span class="keyword">assert</span> np.isclose(</span><br><span class="line">    np.linalg.norm(v_rotated),</span><br><span class="line">    np.linalg.norm(v)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. R^T R = I.</span></span><br><span class="line"><span class="keyword">assert</span> np.allclose(</span><br><span class="line">    R.T @ R,</span><br><span class="line">    np.eye(<span class="number">2</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. A proper rotation has determinant +1.</span></span><br><span class="line"><span class="keyword">assert</span> np.isclose(</span><br><span class="line">    np.linalg.det(R),</span><br><span class="line">    <span class="number">1.0</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. Rotating by theta and then by -theta</span></span><br><span class="line"><span class="comment">#    should recover the original vector.</span></span><br><span class="line">R_inverse = rotation_matrix_2d(-theta)</span><br><span class="line"></span><br><span class="line"><span class="keyword">assert</span> np.allclose(</span><br><span class="line">    R_inverse @ v_rotated,</span><br><span class="line">    v</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;All rotation tests passed.&quot;</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rotation_matrix_2d</span>(<span class="params">theta</span>):</span><br><span class="line">    c = np.cos(theta)</span><br><span class="line">    s = np.sin(theta)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> np.array([</span><br><span class="line">        [c, -s],</span><br><span class="line">        [s,  c]</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">theta = np.deg2rad(<span class="number">37</span>)</span><br><span class="line">R = rotation_matrix_2d(theta)</span><br><span class="line"></span><br><span class="line">v = np.array([<span class="number">0.6</span>, <span class="number">0.8</span>])</span><br><span class="line">v_rotated = R @ v</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. Rotation matrices preserve vector magnitude.</span></span><br><span class="line"><span class="keyword">assert</span> np.isclose(</span><br><span class="line">    np.linalg.norm(v_rotated),</span><br><span class="line">    np.linalg.norm(v)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. R^T R = I.</span></span><br><span class="line"><span class="keyword">assert</span> np.allclose(</span><br><span class="line">    R.T @ R,</span><br><span class="line">    np.eye(<span class="number">2</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. A proper rotation has determinant +1.</span></span><br><span class="line"><span class="keyword">assert</span> np.isclose(</span><br><span class="line">    np.linalg.det(R),</span><br><span class="line">    <span class="number">1.0</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. Rotating by theta and then by -theta</span></span><br><span class="line"><span class="comment">#    should recover the original vector.</span></span><br><span class="line">R_inverse = rotation_matrix_2d(-theta)</span><br><span class="line"></span><br><span class="line"><span class="keyword">assert</span> np.allclose(</span><br><span class="line">    R_inverse @ v_rotated,</span><br><span class="line">    v</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;All rotation tests passed.&quot;</span>)</span><br></pre></td></tr></table></figure>
 <p>Expected output:</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">All rotation tests passed.</span><br></pre></td></tr></table></figure>
 <p>These checks are simple, but they illustrate an important engineering
