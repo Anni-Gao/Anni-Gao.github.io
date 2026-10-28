@@ -247,7 +247,7 @@
         <path d="M15.1 18H3"></path>
       </svg>
       
-      26.7k Words
+      26.8k Words
     </span>
   
 
@@ -788,7 +788,7 @@ x\sin\theta+y\cos\theta
 along the positive y-axis.</p>
 <p>In NumPy, trigonometric functions use radians rather than
 degrees.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">theta = np.deg2rad(<span class="number">90</span>)</span><br><span class="line"></span><br><span class="line">R = np.array([</span><br><span class="line">    [np.cos(theta), -np.sin(theta)],</span><br><span class="line">    [np.sin(theta),  np.cos(theta)]</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">v = np.array([<span class="number">1.0</span>, <span class="number">0.0</span>])</span><br><span class="line">v_rotated = R @ v</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(v_rotated)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">theta = np.deg2rad(<span class="number">90</span>)</span><br><span class="line"></span><br><span class="line">R = np.array([</span><br><span class="line">    [np.cos(theta), -np.sin(theta)],</span><br><span class="line">    [np.sin(theta),  np.cos(theta)]</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">v = np.array([<span class="number">1.0</span>, <span class="number">0.0</span>])</span><br><span class="line">v_rotated = R @ v</span><br><span class="line"></span><br><span class="line"><span class="comment"># To resolve floating-point precision issue</span></span><br><span class="line"><span class="built_in">print</span>(np.<span class="built_in">round</span>(v_rotated, decimals=<span class="number">10</span>))</span><br></pre></td></tr></table></figure>
 <p>Expected output, up to floating-point precision:</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[0. 1.]</span><br></pre></td></tr></table></figure>
 <p>The <code>@</code> operator performs matrix multiplication.</p>
